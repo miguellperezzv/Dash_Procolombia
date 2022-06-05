@@ -1,10 +1,16 @@
 import dash
 from dash import dcc
 from dash import html
+import numpy as np
+import plotly.grapgh.objs as go
 #import dash_core_components as dcc
 #import dash_html_components as html
 
 app = dash.Dash()
+
+np.random.seed(50)
+x_rand = np.random.randint(1,61,60)
+y_rand = np.random.randint(1,61,60)
 
 colors = {
     'text' : "#ff0000",
@@ -27,6 +33,7 @@ app.layout = html.Div([
     
     ),
 
+    #BAR CHART 
     dcc.Graph(
         id = "Simple Graph",
         figure = {
@@ -44,7 +51,30 @@ app.layout = html.Div([
             }
         }
         
+    ),
+
+    #scatter 
+    dcc.Graph(
+        id = 'scatter_chart',
+        figure={
+            'data' : 
+            [
+                go.Scatter(
+                    x = x_rand,
+                    y = y_rand,
+                    mode = "marker"
+                )
+            ],
+            'layout' : go.Layout(
+                title = "Scatterplot random",
+                xasis = {'title': 'Random x'},
+                yasis = {'title': 'Random y'}
+            )
+        }
+        
     )
+
+
 ])
 
 
