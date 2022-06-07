@@ -21,6 +21,8 @@ search_bar = dbc.Row(
             width="auto",
         ),
     ],
+    style = style.NAVBAR_STYLE,
+
     className="g-0 ms-auto flex-nowrap mt-3 mt-md-0",
     align="center",
 )
@@ -34,30 +36,37 @@ navbar = html.Div([
                 # Use row and col to control vertical alignment of logo / brand
                 dbc.Row(
                     [
-                        dbc.Col(html.Img(src=PROCOLOMBIA_LOGO, height="30px")),
-                        dbc.Col(dbc.NavbarBrand("Navbar", className="ms-2")),
+                        dbc.Col(html.Img(src=PROCOLOMBIA_LOGO, height="50px")),
+                        dbc.Col(dbc.NavbarBrand("Touristic campaigns management", className="ms-2",style=style.NAVBAR_TEXT)),
                     ],
                     align="center",
                     className="g-0",
+                    style = style.NAVBAR_STYLE,
+
                 ),
-                href="https://plotly.com",
+                href="https://procolombia.co/",
                 style={"textDecoration": "none"},
             ),
             dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
             dbc.Collapse(
-                search_bar,
+               # search_bar,
                 id="navbar-collapse",
                 is_open=False,
                 navbar=True,
             ),
-        ]
+        ],
+        style = style.NAVBAR_STYLE,
+
     ),
-    color="dark",
-    dark=True,
     
+    style = style.NAVBAR_STYLE,
+
 )
 
-])
+],
+style = style.NAVBAR_STYLE,
+
+)
 
 
 

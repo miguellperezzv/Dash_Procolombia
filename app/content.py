@@ -106,7 +106,7 @@ content_fourth_row = dbc.Row(
 
 content = html.Div(
     [
-        html.H2('Analytics Dashboard Template', style=style.TEXT_STYLE),
+        html.H2('Analytics Dashboard Template', style=style.CONTENT_TEXT),
         html.Hr(),
         content_first_row,
         content_second_row,

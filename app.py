@@ -12,7 +12,8 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = html.Div( [
     html.Div([navbar.navbar]),
-    html.Div([sidebar.sidebar, content.content])
+    html.Div([sidebar.sidebar, content.content]),
+    #html.Div([footer.footer]),
 ])
 
 

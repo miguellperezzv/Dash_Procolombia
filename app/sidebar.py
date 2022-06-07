@@ -101,10 +101,60 @@ controls = dbc.FormGroup(
 )
 
 
+summary = dbc.FormGroup(
+    [
+         html.P('Top Countries', style={
+            'textAlign': 'center'
+        }),
+    
+    
+    dbc.Card(
+        [
+            
+        ]
+    ),
+
+    html.Hr(),
+    html.P('Predictions / Behavior', style={
+            'textAlign': 'center'
+        }),
+    html.Div(
+        [
+            html.H6("Visitors per Month"),
+            html.H6("4444", style={ 'textAlign': 'center'}),
+            html.P('Country Behavior', style={ 'textAlign': 'center'}),
+            dcc.Dropdown(
+                id='dropdown_country',
+                options=[{
+                    'label': 'Brasil',
+                    'value': 'Brasil'
+                }, {
+                    'label': 'Argentina',
+                    'value': 'Argentina'
+                },{
+                    'label': 'Mexico',
+                    'value': 'Mexico'
+                }
+                ],
+                value=['Brasil'],  # default value
+                multi=False
+            ),
+            html.H3('+ 80 visitors ', style={ 'textAlign': 'center'}),
+        ],
+        style={'background-color' :style.PROCOLOMBIA_COLORS["clearer_red"], 'textAlign' : 'center' }
+    )
+
+    ]
+    
+
+)
+
+
 sidebar = html.Div(
     [
-        html.H2('Parameters', style=style.TEXT_STYLE),
+        html.H2('Campaign Name', style=style.SIDEBAR_TEXT),
         html.Hr(),
+        summary, 
         controls
     ],
     style=style.SIDEBAR_STYLE,
