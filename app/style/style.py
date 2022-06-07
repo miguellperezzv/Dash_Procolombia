@@ -6,7 +6,9 @@ SIDEBAR_STYLE = {
     'bottom': 0,
     'width': '20%',
     'padding': '20px 10px',
-    'background-color': '#f8f9fa'
+    'background-color': '#f8f9fa',
+    'margin-top':'100px'
+
 }
 
 # the style arguments for the main content page.
