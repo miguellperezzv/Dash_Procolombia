@@ -1,83 +1,251 @@
 import dash
+import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
-import numpy as np
-import plotly.grapgh.objs as go
-#import dash_core_components as dcc
-#import dash_html_components as html
+from dash.dependencies import Input, Output, State
 
-app = dash.Dash()
+import plotly.express as px
 
-np.random.seed(50)
-x_rand = np.random.randint(1,61,60)
-y_rand = np.random.randint(1,61,60)
-
-colors = {
-    'text' : "#ff0000",
-    'plot_color' : "#D3D3D3",
-    'papel_color' : "#D3D3D3",
+# the style arguments for the sidebar.
+SIDEBAR_STYLE = {
+    'position': 'fixed',
+    'top': 0,
+    'left': 0,
+    'bottom': 0,
+    'width': '20%',
+    'padding': '20px 10px',
+    'background-color': '#f8f9fa'
 }
 
-app.layout = html.Div([
-    html.H1(children = "Hello Dash world",
-        style = {
-            'textAlign' : "center",
-            'color' : colors["text"]
-        }
-    ),
-    html.Div(children = "Dash !!!!!!!!!!!- product!",
-        style = {
-            'textAlign' : "center",
-            'color' : colors["plot_color"]
-        }
-    
-    ),
+# the style arguments for the main content page.
+CONTENT_STYLE = {
+    'margin-left': '25%',
+    'margin-right': '5%',
+    'top': 0,
+    'padding': '20px 10px'
+}
 
-    #BAR CHART 
-    dcc.Graph(
-        id = "Simple Graph",
-        figure = {
-            'data' : [
-                {'x' : [5,6,7], 'y': [12,15,18], 'type' : 'bar', 'name': 'First Chart'},
-                {'x' : [5,6,7], 'y': [2,12,10], 'type' : 'bar', 'name': 'First Chart'}
+TEXT_STYLE = {
+    'textAlign': 'center',
+    'color': '#191970'
+}
+
+CARD_TEXT_STYLE = {
+    'textAlign': 'center',
+    'color': '#0074D9'
+}
+
+
+
+
+controls = dbc.FormGroup(
+    [
+        html.P('Dropdown', style={
+            'textAlign': 'center'
+        }),
+        dcc.Dropdown(
+            id='dropdown',
+            options=[{
+                'label': 'Value One',
+                'value': 'value1'
+            }, {
+                'label': 'Value Two',
+                'value': 'value2'
+            },
+                {
+                    'label': 'Value Three',
+                    'value': 'value3'
+                }
             ],
-            'layout': {
-                'plot_bgcolor' : colors["plot_color"],
-                'paper_bgcolor': "#D3D3D3",
-                'font' : {
-                    'color' : "ff0000",
+            value=['value1'],  # default value
+            multi=True
+        ),
+        html.Br(),
+        html.P('Range Slider', style={
+            'textAlign': 'center'
+        }),
+        dcc.RangeSlider(
+            id='range_slider',
+            min=0,
+            max=20,
+            step=0.5,
+            value=[5, 15]
+        ),
+        html.P('Check Box', style={
+            'textAlign': 'center'
+        }),
+        dbc.Card([dbc.Checklist(
+            id='check_list',
+            options=[{
+                'label': 'Value One',
+                'value': 'value1'
+            },
+                {
+                    'label': 'Value Two',
+                    'value': 'value2'
                 },
-                'title' : "Simple Bar Chart"
-            }
-        }
-        
-    ),
-
-    #scatter 
-    dcc.Graph(
-        id = 'scatter_chart',
-        figure={
-            'data' : 
-            [
-                go.Scatter(
-                    x = x_rand,
-                    y = y_rand,
-                    mode = "marker"
-                )
+                {
+                    'label': 'Value Three',
+                    'value': 'value3'
+                }
             ],
-            'layout' : go.Layout(
-                title = "Scatterplot random",
-                xasis = {'title': 'Random x'},
-                yasis = {'title': 'Random y'}
-            )
-        }
-        
+            value=['value1', 'value2'],
+            inline=True
+        )]),
+        html.Br(),
+        html.P('Radio Items', style={
+            'textAlign': 'center'
+        }),
+        dbc.Card([dbc.RadioItems(
+            id='radio_items',
+            options=[{
+                'label': 'Value One',
+                'value': 'value1'
+            },
+                {
+                    'label': 'Value Two',
+                    'value': 'value2'
+                },
+                {
+                    'label': 'Value Three',
+                    'value': 'value3'
+                }
+            ],
+            value='value1',
+            style={
+                'margin': 'auto'
+            }
+        )]),
+        html.Br(),
+        dbc.Button(
+            id='submit_button',
+            n_clicks=0,
+            children='Submit',
+            color='primary',
+            block=True
+        ),
+    ]
+)
+
+
+sidebar = html.Div(
+    [
+        html.H2('Parameters', style=TEXT_STYLE),
+        html.Hr(),
+        controls
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+content_first_row = dbc.Row([
+    dbc.Col(
+        dbc.Card(
+            [
+
+                dbc.CardBody(
+                    [
+                        html.H4(id='card_title_1', children=['Card Title 1'], className='card-title',
+                                style=CARD_TEXT_STYLE),
+                        html.P(id='card_text_1', children=['Sample text.'], style=CARD_TEXT_STYLE),
+                    ]
+                )
+            ]
+        ),
+        md=3
+    ),
+    dbc.Col(
+        dbc.Card(
+            [
+
+                dbc.CardBody(
+                    [
+                        html.H4('Card Title 2', className='card-title', style=CARD_TEXT_STYLE),
+                        html.P('Sample text.', style=CARD_TEXT_STYLE),
+                    ]
+                ),
+            ]
+
+        ),
+        md=3
+    ),
+    dbc.Col(
+        dbc.Card(
+            [
+                dbc.CardBody(
+                    [
+                        html.H4('Card Title 3', className='card-title', style=CARD_TEXT_STYLE),
+                        html.P('Sample text.', style=CARD_TEXT_STYLE),
+                    ]
+                ),
+            ]
+
+        ),
+        md=3
+    ),
+    dbc.Col(
+        dbc.Card(
+            [
+                dbc.CardBody(
+                    [
+                        html.H4('Card Title 4', className='card-title', style=CARD_TEXT_STYLE),
+                        html.P('Sample text.', style=CARD_TEXT_STYLE),
+                    ]
+                ),
+            ]
+        ),
+        md=3
     )
-
-
 ])
 
 
+content_second_row = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(id='graph_1'), md=4
+        ),
+        dbc.Col(
+            dcc.Graph(id='graph_2'), md=4
+        ),
+        dbc.Col(
+            dcc.Graph(id='graph_3'), md=4
+        )
+    ]
+)
+
+content_third_row = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(id='graph_4'), md=12,
+        )
+    ]
+)
+
+content_fourth_row = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(id='graph_5'), md=6
+        ),
+        dbc.Col(
+            dcc.Graph(id='graph_6'), md=6
+        )
+    ]
+)
+
+
+content = html.Div(
+    [
+        html.H2('Analytics Dashboard Template', style=TEXT_STYLE),
+        html.Hr(),
+        content_first_row,
+        content_second_row,
+        content_third_row,
+        content_fourth_row
+    ],
+    style=CONTENT_STYLE
+)
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.layout = html.Div([sidebar, content])
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
