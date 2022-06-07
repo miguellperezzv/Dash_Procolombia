@@ -5,22 +5,9 @@ from dash import html
 from dash.dependencies import Input, Output, State
 
 import plotly.express as px
+from app.style import style
 
 
-SIDEBAR_STYLE = {
-    'position': 'fixed',
-    'top': 0,
-    'left': 0,
-    'bottom': 0,
-    'width': '20%',
-    'padding': '20px 10px',
-    'background-color': '#f8f9fa'
-}
-
-TEXT_STYLE = {
-    'textAlign': 'center',
-    'color': '#191970'
-}
 
 
 
@@ -116,9 +103,9 @@ controls = dbc.FormGroup(
 
 sidebar = html.Div(
     [
-        html.H2('Parameters', style=TEXT_STYLE),
+        html.H2('Parameters', style=style.TEXT_STYLE),
         html.Hr(),
         controls
     ],
-    style=SIDEBAR_STYLE,
+    style=style.SIDEBAR_STYLE,
 )
