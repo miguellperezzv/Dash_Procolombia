@@ -103,11 +103,16 @@ content_fourth_row = dbc.Row(
     ]
 )
 
+dropdowns = html.Div([
+    
+])
+
 
 content = html.Div(
     [
         html.H2('Analytics Dashboard Template', style=style.CONTENT_TEXT),
         html.Hr(),
+        dropdowns,
         content_first_row,
         content_second_row,
         content_third_row,
