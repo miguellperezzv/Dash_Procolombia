@@ -18,6 +18,7 @@ app.layout = html.Div( [
          content.content
         ]),
     #html.Div([footer.footer]),
+    
 ])
 
 

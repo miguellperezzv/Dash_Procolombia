@@ -36,7 +36,8 @@ SIDEBAR_STYLE = {
 
 SIDEBAR_TEXT = {
     'textAlign': 'center',
-    'color': '#191970'
+    'color': '#FFFFFF',
+    'font face' : "Times New Roman",
 }
 
 # the style arguments for the main content page.

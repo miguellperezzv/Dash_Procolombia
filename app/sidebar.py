@@ -102,23 +102,24 @@ controls = dbc.FormGroup(
 '''
 
 table = [
-    html.Thead(html.Tr([html.Th("First Name"), html.Th("Last Name")]))
+    html.Thead(html.Tr([html.Th("Country"), html.Th("Visitors")]))
 ]
 
-row1 = html.Tr([html.Td("Arthur"), html.Td("Dent")])
-row2 = html.Tr([html.Td("Ford"), html.Td("Prefect")])
-row3 = html.Tr([html.Td("Zaphod"), html.Td("Beeblebrox")])
-row4 = html.Tr([html.Td("Trillian"), html.Td("Astra")])
+row1 = html.Tr([html.Td("Brasil"), html.Td("30")])
+row2 = html.Tr([html.Td("Canada"), html.Td("25")])
+row3 = html.Tr([html.Td("Mexico"), html.Td("20")])
 
-table_body = [html.Tbody([row1, row2, row3, row4])]
+
+table_body = [html.Tbody([row1, row2, row3])]
 
 table_top_countries = dbc.Table(table + table_body, bordered=True)
 
 summary = dbc.FormGroup(
     [
         
-         html.P('Top Countries', style={
-            'textAlign': 'center'
+         html.P(html.B('Top Countries'), style={
+            'text-align': 'center', 
+            'color': '#FFFFFF',
         }),
     
     
@@ -129,15 +130,17 @@ summary = dbc.FormGroup(
     ),
 
     html.Hr(),
-    html.P('Predictions / Behavior', style={
-            'textAlign': 'center'
+    html.P(html.B('Predictions / Behavior'), style={
+            'textAlign': 'center',
+            'color': '#FFFFFF',
         }),
     html.Div(
         [
             html.H6("Visitors per Month"),
             html.H6("4444", style={ 'textAlign': 'center'}),
             html.P('Country Behavior', style={ 'textAlign': 'center'}),
-            dcc.Dropdown(
+            html.Div([
+                dcc.Dropdown(
                 id='dropdown_country',
                 options=[{
                     'label': 'Brasil',
@@ -151,8 +154,13 @@ summary = dbc.FormGroup(
                 }
                 ],
                 value=['Brasil'],  # default value
-                multi=False
+                multi=False,
+                
             ),
+            ],
+            style = {'margin-left' : '10px','margin-right' : '10px',}
+            ),
+            
             html.H3('+ 80 visitors ', style={ 'textAlign': 'center'}),
         ],
         style={'background-color' :style.PROCOLOMBIA_COLORS["clearer_red"], 'textAlign' : 'center' }
