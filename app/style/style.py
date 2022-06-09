@@ -64,3 +64,7 @@ NAVBAR_TEXT = {
     'textAlign': 'center',
     'color': '#FFFFFF',
 }
+
+BUTTONS = {
+    'text-align':'center'
+}

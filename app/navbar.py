@@ -29,6 +29,7 @@ search_bar = dbc.Row(
 
 
 navbar = html.Div([
+    
     dbc.Navbar(
     dbc.Container(
         [
@@ -45,7 +46,7 @@ navbar = html.Div([
 
                 ),
                 href="https://procolombia.co/",
-                style={"textDecoration": "none"},
+                style=style.NAVBAR_STYLE,
             ),
             dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
             dbc.Collapse(
@@ -62,6 +63,8 @@ navbar = html.Div([
     style = style.NAVBAR_STYLE,
 
 )
+
+    
 
 ],
 style = style.NAVBAR_STYLE,
