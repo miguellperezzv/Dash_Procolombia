@@ -104,15 +104,29 @@ content_fourth_row = dbc.Row(
 )
 
 dropdowns = html.Div([
+
+    dbc.Row([
+        dbc.Col(
+            html.Div([html.P(html.B("Select a campaign: ")),  dcc.Dropdown()]),
+        ),
+        dbc.Col(
+            html.Div([html.P(html.B("Select a Period: ")),  dcc.Dropdown()]), 
+        )
+    ]
+    )
+
+      
     
-])
+] )
 
 
 content = html.Div(
     [
+        
         html.H2('Analytics Dashboard Template', style=style.CONTENT_TEXT),
         html.Hr(),
         dropdowns,
+        html.Hr(),
         content_first_row,
         content_second_row,
         content_third_row,
