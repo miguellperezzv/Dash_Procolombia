@@ -1,10 +1,12 @@
+
+
 #global colors
 PROCOLOMBIA_COLORS = {
 
     #Procolombia
-    'yellow' : "#FFBA00",
-    'blue' : "#007DCA", 
-    'red' : "#F00030",
+    'yellow' : "#FDCD30",
+    'blue' : "#1883AE",  
+    'red' : "#C11E35",
     #Clear tone
     'clear_yellow' : '#FFD977',
     'clear_blue'   : '#95BDCC',
@@ -25,7 +27,7 @@ SIDEBAR_STYLE = {
     'bottom': 0,
     'width': '20%',
     'padding': '20px 10px',
-    'background-color': PROCOLOMBIA_COLORS['clearer_blue'],
+    'background-color': PROCOLOMBIA_COLORS['blue'],
     'margin-top':'40px',
     'margin-left' : '5px',
     'float': 'left'

@@ -10,7 +10,7 @@ from app.style import style
 
 
 
-
+'''
 controls = dbc.FormGroup(
     [
         html.P('Dropdown', style={
@@ -99,7 +99,7 @@ controls = dbc.FormGroup(
         ),
     ]
 )
-
+'''
 
 table = [
     html.Thead(html.Tr([html.Th("First Name"), html.Th("Last Name")]))
@@ -169,7 +169,7 @@ sidebar = html.Div(
         html.H2('Campaign Name', style=style.SIDEBAR_TEXT),
         html.Hr(),
         summary, 
-        controls
+        #controls
     ],
     style=style.SIDEBAR_STYLE,
 )
