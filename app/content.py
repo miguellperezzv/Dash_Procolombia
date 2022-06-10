@@ -73,14 +73,30 @@ content_first_row = dbc.Row([
 content_second_row = dbc.Row(
     [
         dbc.Col(
-            dcc.Graph(id='graph_1'), md=4
+            dcc.Graph(id='graph_1',
+                figure={
+            'data': [
+                {'x': [1, 2, 3, 4], 'y': [1, 8, 3, 7], 'type': 'line', 'name': 'Some Variable'},
+                { 'x': [1, 2, 3, 4], 'y': [5, 2, 8, 8], 'type': 'bar', 'name': 'Some '},
+                ],
+            'layout': {
+                'title': 'Graph Test'
+        }
+      },
+            ),
+            md=6,
         ),
-        dbc.Col(
-            dcc.Graph(id='graph_2'), md=4
+        dbc.Col([
+            dcc.Graph(id='graph_histogram'), 
+            html.P("Mean:"),
+            dcc.Slider(id="mean", min=-3, max=3, value=0,  marks={-3: '-3', 3: '3'}),
+            html.P("Standard Deviation:"),
+            dcc.Slider(id="std", min=1, max=3, value=1,  marks={1: '1', 3: '3'}),
+            
+        ],
+        md=6,
         ),
-        dbc.Col(
-            dcc.Graph(id='graph_3'), md=4
-        )
+        
     ]
 )
 
@@ -117,7 +133,9 @@ dropdowns = html.Div([
         dbc.Col(
             html.Div([html.P(html.B("Select a Period: ")),  dcc.Dropdown(
                 ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                'Enero',
                 clearable = False ,
+                
                 id = "dropdown_period"
 
             )]), 
@@ -137,7 +155,7 @@ content = html.Div(
         html.Hr(),
         dropdowns,
         html.Hr(),
-        content_first_row,
+        #content_first_row,
         content_second_row,
         content_third_row,
         content_fourth_row

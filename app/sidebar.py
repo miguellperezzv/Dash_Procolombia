@@ -173,11 +173,9 @@ summary = dbc.FormGroup(
 
 
 sidebar = html.Div(
-    [   html.Div([
-            html.H2('Campaign Name', style=style.SIDEBAR_TEXT, id="lbl_campaign_name")],
-            id="container_lbl_campaign_name",
-            style={'color_text' : "#FFFFFF"}
-        ),
+    [   
+        html.H1("period", id="lbl_period", style= {'color': '#FFFFFF', 'font-size' : '13px', 'textAlign': 'center'}),
+        html.H2('Campaign Name', style=style.SIDEBAR_TEXT, id="lbl_campaign_name"),
         
         html.Hr(),
         summary, 

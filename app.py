@@ -7,6 +7,7 @@ from app import sidebar, content, navbar
 
 import plotly.express as px
 from app.style import style
+import numpy as np
 
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -55,12 +56,26 @@ def update_card_text_1(n_clicks, dropdown_value, range_slider_value, check_list_
 
 @app.callback(
     Output('lbl_campaign_name', 'children'),
-    Input('dropdown_campaign', 'value')
+    Output('lbl_period', "children"),
+    Input('dropdown_campaign', 'value'),
+    Input('dropdown_period', 'value')
     
 )
-def update_output(label):
-    print(label)
-    return f' {label}'
+def update_features_campaign_period(campaign, period):
+    print(campaign)
+    print(period.upper())
+    return campaign , period.upper()
+
+
+@app.callback(
+    Output("graph_histogram", "figure"), 
+    Input("mean", "value"), 
+    Input("std", "value")
+    )
+def display_histogram(mean,std):
+   data = np.random.normal(mean, std, size=500) # replace with your own data source
+   fig = px.histogram(data, range_x=[-10, 10])
+   return fig
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
