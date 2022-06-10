@@ -107,10 +107,20 @@ dropdowns = html.Div([
 
     dbc.Row([
         dbc.Col(
-            html.Div([html.P(html.B("Select a campaign: ")),  dcc.Dropdown()]),
+            html.Div([html.P(html.B("Select a campaign: ")),  dcc.Dropdown(
+                ['Agenda comercial de turismo', 'Agendas de Cooperación', 'Capacitaciones y presentaciones de destino', 'FAM - PRESS Trips', 'Feria internacional de Turismo', 'Macrorruedas y Encuentros Comerciales', 'Primera Visita', 'Entrega informacion valor agregado', 'Otras Acciones promocion turismo', 'Preparación y adecuación '],
+                'Primera Visita',
+                clearable=False,
+                id="dropdown_campaign"
+            )]),
         ),
         dbc.Col(
-            html.Div([html.P(html.B("Select a Period: ")),  dcc.Dropdown()]), 
+            html.Div([html.P(html.B("Select a Period: ")),  dcc.Dropdown(
+                ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                clearable = False ,
+                id = "dropdown_period"
+
+            )]), 
         )
     ]
     )

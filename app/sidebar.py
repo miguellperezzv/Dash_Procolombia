@@ -173,11 +173,16 @@ summary = dbc.FormGroup(
 
 
 sidebar = html.Div(
-    [
-        html.H2('Campaign Name', style=style.SIDEBAR_TEXT),
+    [   html.Div([
+            html.H2('Campaign Name', style=style.SIDEBAR_TEXT, id="lbl_campaign_name")],
+            id="container_lbl_campaign_name",
+            style={'color_text' : "#FFFFFF"}
+        ),
+        
         html.Hr(),
         summary, 
         #controls
     ],
+    
     style=style.SIDEBAR_STYLE,
 )

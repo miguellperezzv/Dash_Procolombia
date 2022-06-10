@@ -53,7 +53,14 @@ def update_card_text_1(n_clicks, dropdown_value, range_slider_value, check_list_
     print(radio_items_value)  # Sample data and figure
     return 'Card text change by call back'
 
-
+@app.callback(
+    Output('lbl_campaign_name', 'children'),
+    Input('dropdown_campaign', 'value')
+    
+)
+def update_output(label):
+    print(label)
+    return f' {label}'
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
