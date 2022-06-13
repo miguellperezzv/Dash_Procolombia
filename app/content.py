@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 
 import plotly.express as px
 from app.style import style
+from graficos import graficos
 
 
 
