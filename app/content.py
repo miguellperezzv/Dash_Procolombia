@@ -76,6 +76,8 @@ content_second_row = dbc.Row(
         dbc.Col(
             dcc.Graph(id='graph_1',
                 figure={
+            #graficos.prophet()  ,              
+                 
             'data': [
                 {'x': [1, 2, 3, 4], 'y': [1, 8, 3, 7], 'type': 'line', 'name': 'Some Variable'},
                 { 'x': [1, 2, 3, 4], 'y': [5, 2, 8, 8], 'type': 'bar', 'name': 'Some '},
@@ -83,6 +85,7 @@ content_second_row = dbc.Row(
             'layout': {
                 'title': 'Graph Test'
         }
+        
       },
             ),
             md=6,
