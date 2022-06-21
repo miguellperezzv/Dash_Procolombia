@@ -18,7 +18,7 @@ navbar = dbc.Navbar([
                 html.A(
                 html.Img(src=style.DS4A, height="50px"),
                 href="https://www.correlation-one.com/data-science-for-all-empowerment",
-                style={'textAlign': 'center', 'margin-right': '5%',}
+                style={'textAlign': 'center', 'margin-right': '5%', "margin-bottom":"10px"}
                 ),
                 
                 html.A(
@@ -32,13 +32,14 @@ navbar = dbc.Navbar([
         ),
         dbc.Col(
             [
-             html.H3("Team 76"),
-             dbc.Col(dbc.NavbarBrand("Touristic campaigns management", className="ms-2",style=style.NAVBAR_TEXT)),
+            dbc.Col( html.H3("TEAM 76", className="titulo"))
             ]
             
         ),
 
-
+        dbc.Col(
+            dbc.NavbarBrand("Touristic campaigns management", className="ms-2",style=style.NAVBAR_TEXT)
+        ),
         
             dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
             dbc.Collapse(

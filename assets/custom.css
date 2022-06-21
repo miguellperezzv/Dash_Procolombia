@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'FuturaMaxi'; 
+    src: url('/assets/FuturaMaxiBold.otf');
+}
+
+.titulo{
+    font-family: 'FuturaMaxi';
+}
+
+.ms-2{
+    font-family: 'FuturaMaxi';
+}
