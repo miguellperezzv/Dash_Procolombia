@@ -130,6 +130,18 @@ dropdowns = html.Div([
                 id = "dropdown_period"
 
             )]), 
+        ),
+        dbc.Col(
+            dcc.Dropdown(
+                    id="dropdown",
+                    options=[
+                        {"label": "GOLD", "value": "gold"},
+                        {"label": "SILVER", "value": "silver"},
+                        {"label": "BRONZE", "value": "bronze"},
+                    ],
+                    value=['gold', 'silver', 'bronze'],
+                    multi = True
+                ),
         )
     ]
     )

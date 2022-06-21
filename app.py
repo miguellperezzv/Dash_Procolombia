@@ -11,50 +11,23 @@ import numpy as np
 
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], prevent_initial_callbacks=True)
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 app.layout = html.Div( [
     html.Div([navbar.navbar]),
+    html.Div([dcc.Graph(id="graph")]),
     html.Div([
          sidebar.sidebar,
          content.content
         ]),
+    
     #html.Div([footer.footer]),
     
 ])
 
+ 
 
-  
-
-@app.callback(
-    Output('card_title_1', 'children'),
-    [Input('submit_button', 'n_clicks')],
-    [State('dropdown', 'value'), State('range_slider', 'value'), State('check_list', 'value'),
-     State('radio_items', 'value')
-     ])
-def update_card_title_1(n_clicks, dropdown_value, range_slider_value, check_list_value, radio_items_value):
-    print(n_clicks)
-    print(dropdown_value)
-    print(range_slider_value)
-    print(check_list_value)
-    print(radio_items_value)  # Sample data and figure
-    return 'Card Tile 1 change by call back'
-
-
-@app.callback(
-    Output('card_text_1', 'children'),
-    [Input('submit_button', 'n_clicks')],
-    [State('dropdown', 'value'), State('range_slider', 'value'), State('check_list', 'value'),
-     State('radio_items', 'value')
-     ])
-def update_card_text_1(n_clicks, dropdown_value, range_slider_value, check_list_value, radio_items_value):
-    print(n_clicks)
-    print(dropdown_value)
-    print(range_slider_value)
-    print(check_list_value)
-    print(radio_items_value)  # Sample data and figure
-    return 'Card text change by call back'
 
 @app.callback(
     Output('lbl_campaign_name', 'children'),
@@ -80,12 +53,26 @@ def display_histogram(mean,std):
    return fig
 
 @app.callback(
-    Output("graph-1", "figure"), 
-    Input("dropdown-campaign", "value"))
-def displayProphet():
+    Output("graph", "figure"), 
+    Input("dropdown", "value"))
+
+def displayProphet(cols):
+    cols = cols
     print("Displaying prophet")
     fig = graficos.prophet()
     return fig
+"""  #por si no da el prophet
+def filter_heatmap(cols):
+
+    df = px.data.medals_wide(indexed=True)
+    fig = px.imshow(df[cols])
+    print("tipo ")
+    print(type(fig))
+    return fig
+"""
+
+
+
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
