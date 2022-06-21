@@ -17,7 +17,8 @@ PROCOLOMBIA_COLORS = {
     'clearer_red'     : '#E1B4BB'
 }
 
-
+PROCOLOMBIA_LOGO = "https://procolombia.co/sites/all/themes/proexport/reskin/images/logo_proco_res.png"
+DS4A = "https://hopin.com/quiin/organizations/pictures/000/098/495/original/ds4a-logo_2x.png"
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {

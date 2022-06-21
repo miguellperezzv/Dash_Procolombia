@@ -9,25 +9,55 @@ from assets import style
 
 
 
-PROCOLOMBIA_LOGO = "https://procolombia.co/sites/all/themes/proexport/reskin/images/logo_proco_res.png"
 
-search_bar = dbc.Row(
-    [
-        dbc.Col(dbc.Input(type="search", placeholder="Search")),
+
+navbar = dbc.Navbar([
+
         dbc.Col(
-            dbc.Button(
-                "Search", color="primary", className="ms-2", n_clicks=0
-            ),
-            width="auto",
+            [
+                html.A(
+                html.Img(src=style.DS4A, height="50px"),
+                href="https://www.correlation-one.com/data-science-for-all-empowerment",
+                style={'textAlign': 'center', 'margin-right': '5%',}
+                ),
+                
+                html.A(
+                html.Img(src=style.PROCOLOMBIA_LOGO, height="50px"),
+                href="https://procolombia.co/",
+                style={'textAlign': 'center','margin-left': '5%',}
+                ),
+               
+            ]
+            
         ),
-    ],
-    style = style.NAVBAR_STYLE,
+        dbc.Col(
+            [
+             html.H3("Team 76"),
+             dbc.Col(dbc.NavbarBrand("Touristic campaigns management", className="ms-2",style=style.NAVBAR_TEXT)),
+            ]
+            
+        ),
 
-    className="g-0 ms-auto flex-nowrap mt-3 mt-md-0",
-    align="center",
+
+        
+            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+            dbc.Collapse(
+               # search_bar,
+                id="navbar-collapse",
+                is_open=False,
+                navbar=True,
+            ),
+    
+    ],
+    #brand="DS4A Project - Team  76",
+    color=style.PROCOLOMBIA_COLORS["clear_blue"],
+    dark=True,
+    className="mb-2",
 )
 
 
+
+"""
 navbar = html.Div([
     
     dbc.Navbar(
@@ -70,7 +100,7 @@ navbar = html.Div([
 style = style.NAVBAR_STYLE,
 
 )
-
+"""
 
 
 

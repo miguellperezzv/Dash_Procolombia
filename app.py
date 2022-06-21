@@ -14,7 +14,7 @@ import numpy as np
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-
+"""
 app.layout = html.Div( [
     html.Div([navbar.navbar]),
     html.Div([dcc.Graph(id="graph")]),
@@ -27,7 +27,11 @@ app.layout = html.Div( [
     
 ])
 
- 
+""" 
+
+app.layout = html.Div([
+    navbar.navbar
+])
 
 
 @app.callback(

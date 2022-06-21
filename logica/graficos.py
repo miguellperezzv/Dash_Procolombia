@@ -11,8 +11,8 @@ from prophet.plot import plot_plotly, plot_components_plotly
 
 
 #campañas=pd.read_csv('D:\Descargas\\campañas.csv') 
-campañas=pd.read_csv('graficos\\BD\\campañas.csv', sep = '|') 
-vuelos=pd.read_csv('graficos\BD\\vuelos.csv', sep = '|') 
+campañas=pd.read_csv('data\\campañas.csv', sep = '|') 
+vuelos=pd.read_csv('data\\vuelos.csv', sep = '|') 
 #vuelos=pd.read_csv('D:\Descargas\\vuelos.csv') 
 
 
