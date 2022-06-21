@@ -6,6 +6,8 @@ import statsmodels.api as sm ### Sarimax
 import numpy as np
 import statsmodels.formula.api as smf
 import prophet as prp
+from dash import Dash, dcc, html, Input, Output, callback
+from prophet.plot import plot_plotly, plot_components_plotly
 
 
 #campañas=pd.read_csv('D:\Descargas\\campañas.csv') 
@@ -36,7 +38,11 @@ a=a[['llave','pais_ori','pasajeros']]
 
 ejercicio=pd.merge(c, mexico, on='ds',how='left').fillna(0)
 
+
+
+
 def prophet():
+    print("Ejecutando profet")
     m1 = prp.Prophet()
     m1.add_regressor('x1')
     m1.add_regressor('x2')
@@ -60,7 +66,9 @@ def prophet():
     forecast = m1.predict(future)
     forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
     fig1 = m1.plot(forecast)
+    
+    figFinal = plot_plotly(m1, forecast)
     print(type(fig1))
-    return fig1
+    return figFinal
 
 

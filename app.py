@@ -4,13 +4,15 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
 from app import sidebar, content, navbar
-
+from graficos import  graficos
 import plotly.express as px
 from app.style import style
 import numpy as np
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], prevent_initial_callbacks=True)
+
 
 app.layout = html.Div( [
     html.Div([navbar.navbar]),
@@ -76,6 +78,14 @@ def display_histogram(mean,std):
    data = np.random.normal(mean, std, size=500) # replace with your own data source
    fig = px.histogram(data, range_x=[-10, 10])
    return fig
+
+@app.callback(
+    Output("graph-1", "figure"), 
+    Input("dropdown-campaign", "value"))
+def displayProphet():
+    print("Displaying prophet")
+    fig = graficos.prophet()
+    return fig
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
