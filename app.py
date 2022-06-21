@@ -3,10 +3,11 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
-from app import sidebar, content, navbar
-from graficos import  graficos
+from app import sidebar
+from components import content, navbar
+from logica import  graficos
 import plotly.express as px
-from app.style import style
+from assets import style
 import numpy as np
 
 
@@ -52,6 +53,7 @@ def display_histogram(mean,std):
    fig = px.histogram(data, range_x=[-10, 10])
    return fig
 
+"""
 @app.callback(
     Output("graph", "figure"), 
     Input("dropdown", "value"))
@@ -61,7 +63,7 @@ def displayProphet(cols):
     print("Displaying prophet")
     fig = graficos.prophet()
     return fig
-"""  #por si no da el prophet
+  #por si no da el prophet
 def filter_heatmap(cols):
 
     df = px.data.medals_wide(indexed=True)

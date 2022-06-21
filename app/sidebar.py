@@ -5,7 +5,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 
 import plotly.express as px
-from app.style import style
+from assets import style
 
 
 

@@ -1,12 +1,12 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import dcc
-from dash import html
+from dash import html,  callback
 from dash.dependencies import Input, Output, State
 
 import plotly.express as px
-from app.style import style
-from graficos import graficos
+from assets import style
+from logica import graficos
 
 
 
@@ -161,7 +161,20 @@ content = html.Div(
         #content_first_row,
         content_second_row,
         content_third_row,
-        content_fourth_row
+        content_fourth_row,
+        html.Div([dcc.Graph(id="graph-inner")]),
+        dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
     ],
     style=style.CONTENT_STYLE
 )
+
+
+@dash.callback(
+    Output("graph-inner", "figure"), 
+    Input("dropdown-inner", "value"))
+
+def displayProphet(cols):
+    cols = cols
+    print("Displaying prophet")
+    fig = graficos.prophet()
+    return fig
