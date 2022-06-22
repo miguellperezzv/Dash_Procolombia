@@ -38,7 +38,7 @@ navbar = dbc.Navbar([
         ),
 
         dbc.Col(
-            dbc.NavbarBrand("Touristic campaigns management", className="ms-2",style=style.NAVBAR_TEXT)
+            dbc.NavbarBrand("Touristic promotion activities Dashboard", className="ms-2")
         ),
         
             dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
@@ -53,7 +53,7 @@ navbar = dbc.Navbar([
     #brand="DS4A Project - Team  76",
     color=style.PROCOLOMBIA_COLORS["clear_blue"],
     dark=True,
-    className="mb-2",
+    #className="mb-2",
 )
 
 

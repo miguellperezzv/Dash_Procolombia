@@ -3,10 +3,27 @@
     src: url('/assets/FuturaMaxiBold.otf');
 }
 
+:root {
+    
+    --yellow : "#FDCD30";
+    --blue : "#1883AE";
+    --red : "#C11E35";
+    
+    --clear_yellow : '#FFD977';
+    --clear_blue   : '#95BDCC';
+    --clear_red     : '#F0849D';
+    
+    --clearer_yellow : '#FFECC4';
+    --clearer_blue   : '#B8C6D1';
+    --clearer_red     : '#E1B4BB'
+  }
+
 .titulo{
     font-family: 'FuturaMaxi';
+    color: var(--clear_yellow);
 }
 
 .ms-2{
     font-family: 'FuturaMaxi';
+    color: blue;
 }
