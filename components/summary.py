@@ -15,12 +15,13 @@ general_summary = dbc.Row([
     ],lg=9, md=9),
     dbc.Col([
         dbc.Row(html.P(html.B("Select a promotion activity: "))),
-        dbc.Row([
+       
             dcc.Dropdown(
                 options=['Agenda comercial de turismo', 'Agendas de Cooperación', 'Capacitaciones y presentaciones de destino', 'FAM - PRESS Trips', 'Feria internacional de Turismo', 'Macrorruedas y Encuentros Comerciales', 'Primera Visita', 'Entrega informacion valor agregado', 'Otras Acciones promocion turismo', 'Preparación y adecuación '],
+                value="Agendas de Cooperación",
                 clearable=False,
                 id="dropdown_promotion_activity",
             ),
-        ]),
+        
     ],lg=3, md=3),
 ])
