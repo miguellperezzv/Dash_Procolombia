@@ -23,7 +23,7 @@ dropdowns = dbc.Col([
                 clearable=False,
                 id="dropdown_region",
             ),
-    ],lg=9, md=12),
+    ],lg=10, md=12),
     html.Br(),
 
     dbc.Col([
@@ -32,11 +32,12 @@ dropdowns = dbc.Col([
     
     dbc.Col([
         dcc.Dropdown(
-                options=graficos.getCountries(),   
+                options=graficos.getCountries(), 
+                value = graficos.getCountries()[0],  
                 clearable=False,
                 id='dropdown_countryy',
             ),
-    ], lg=9, md=12),
+    ], lg=10, md=12),
     
     
 ] )

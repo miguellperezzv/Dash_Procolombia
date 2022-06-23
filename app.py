@@ -33,14 +33,18 @@ app.layout = html.Div( [
 app.layout = html.Div([
     navbar.navbar,
     content.content,
-    html.P("Dummy ", id="dummy"),
-    dbc.Col([
+    html.P("alemania", id="dummy"),
+    html.Div([
         dcc.Dropdown(
-                options=graficos.getCountries(),   
+                id='select_country',
+                options=graficos.getCountries(),
+                value = graficos.getCountries()[0],   
                 clearable=False,
-                id='dropdown_country',
+                
             ),
-    ], lg=9, md=12),
+    ])
+        
+    
 ])
 
 """
@@ -109,13 +113,13 @@ def filter_heatmap(cols):
 def displayProphet(country):
     print(country)
     print("Displaying prophet")
-    fig = graficos.prophet()
+    fig = graficos.prophet(country)
     return fig
 
 
 @app.callback(
     Output('lblGeneralSummary', 'children'),
-    Input("dropdown-country", "value")
+    Input("select-country", "value")
 )
 def selectedCountry(country):
     print(country)
