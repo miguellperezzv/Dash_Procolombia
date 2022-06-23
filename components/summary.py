@@ -21,6 +21,6 @@ general_summary = dbc.Row([
                 clearable=False,
                 id="dropdown_promotion_activity",
             ),
-        ],lg=3),
+        ]),
     ],lg=3, md=3),
 ])
