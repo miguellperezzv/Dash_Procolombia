@@ -1,9 +1,8 @@
-import dash
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
 from dash.dependencies import Input, Output, State
-from components.table import details_table
+from components.summary import details_table, general_summary
 
 import plotly.express as px
 from assets import style
@@ -65,6 +64,9 @@ content = html.Div(
             details_table
         ],lg=9, md=12),
         html.Hr(),
+        html.H2('General Summary by country', style={"text-align":"center"}),
+          
+        general_summary,
         
         #content_first_row,
         #content_second_row,
