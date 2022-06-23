@@ -17,10 +17,8 @@ vuelos=pd.read_csv('data\\vuelos.csv', sep = '|')
 
 
 
-a=vuelos.groupby(['llave','pais_ori']).sum().reset_index()
-a=a[['llave','pais_ori','pasajeros']]
-m1 = prp.Prophet()
-countries = a['pais_ori'].unique()
+
+countries = vuelos['pais_ori'].unique()
 
 
 
@@ -78,6 +76,9 @@ def prophet(country):
 """
 
 def prophet():
+    a=vuelos.groupby(['llave','pais_ori']).sum().reset_index()
+    a=a[['llave','pais_ori','pasajeros']]
+    m1 = prp.Prophet()
     #country = country
     b=a[a['pais_ori']=='mexico']
 

@@ -13,7 +13,7 @@ import numpy as np
 
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
-app.config['suppress_callback_exceptions'] = False
+#app.config['suppress_callback_exceptions'] = False
 
 """
 app.layout = html.Div( [
@@ -33,6 +33,14 @@ app.layout = html.Div( [
 app.layout = html.Div([
     navbar.navbar,
     content.content,
+    html.P("Dummy ", id="dummy"),
+    dbc.Col([
+        dcc.Dropdown(
+                options=graficos.getCountries(),   
+                clearable=False,
+                id='dropdown_country',
+            ),
+    ], lg=9, md=12),
 ])
 
 """
@@ -93,7 +101,25 @@ def filter_heatmap(cols):
     return fig
 """
 
+@app.callback(
+    Output("graph-inner", "figure"), 
+    #Input("dropdown-country", "value"))
+    Input("dummy", "children"))
 
+def displayProphet(country):
+    print(country)
+    print("Displaying prophet")
+    fig = graficos.prophet()
+    return fig
+
+
+@app.callback(
+    Output('lblGeneralSummary', 'children'),
+    Input("dropdown-country", "value")
+)
+def selectedCountry(country):
+    print(country)
+    return "General Summary ("+str(country)+")"
 
 
 if __name__ == '__main__':

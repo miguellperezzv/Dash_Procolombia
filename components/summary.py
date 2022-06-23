@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
 import pandas as pd
+from dash import html,  callback
+from dash.dependencies import Input, Output
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
@@ -25,3 +27,5 @@ general_summary = dbc.Row([
         
     ],lg=3, md=3),
 ])
+
+

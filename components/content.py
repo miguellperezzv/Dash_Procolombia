@@ -34,7 +34,7 @@ dropdowns = dbc.Col([
         dcc.Dropdown(
                 options=graficos.getCountries(),   
                 clearable=False,
-                id="dropdown_country",
+                id='dropdown_countryy',
             ),
     ], lg=9, md=12),
     
@@ -52,7 +52,7 @@ content = html.Div(
         dbc.Col([
            dcc.Graph(id="graph-inner"),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
-        ]),
+        ], lg =9, md = 12),
         ]
             
         ),
@@ -64,7 +64,7 @@ content = html.Div(
             details_table
         ],lg=9, md=12),
         html.Hr(),
-        html.H2('General Summary by country', style={"text-align":"center"}),
+        html.H2('General Summary by country', style={"text-align":"center"}, id="lblGeneralSummary"),
           
         general_summary,
         
@@ -79,14 +79,4 @@ content = html.Div(
 
 
 
-"""
-@dash.callback(
-    Output("graph-inner", "figure"), 
-    Input("dropdown-country", "value"))
-"""
-def displayProphet(country):
-    print(country)
-    print("Displaying prophet")
-    fig = graficos.prophet()
-    return fig
 
