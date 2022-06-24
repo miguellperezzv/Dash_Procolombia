@@ -13,8 +13,8 @@ details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i
 
 general_summary = dbc.Row([
     dbc.Col([
-        "Hola Mundo"
-    ],lg=9, md=9),
+        html.P(html.B("Select a promotion activity: "))
+    ],lg=9, md=9, id="col_summary"),
     dbc.Col([
         dbc.Row(html.P(html.B("Select a promotion activity: "))),
        
@@ -23,9 +23,16 @@ general_summary = dbc.Row([
                 value="Agendas de Cooperación",
                 clearable=False,
                 id="dropdown_promotion_activity",
+                multi=True
             ),
         
     ],lg=3, md=3),
 ])
 
 
+@callback(
+    Output('col_summary', 'children'),
+    Input('dropdown_promotion_activity', 'value'),
+)
+def generateGeneralStats(activities):
+    print(activities)

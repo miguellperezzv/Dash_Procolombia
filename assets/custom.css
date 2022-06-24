@@ -27,3 +27,13 @@
     font-family: 'FuturaMaxi';
     color: blue;
 }
+
+.dropdowns{
+    margin-top: 20px;
+}
+
+.contentDiv{
+    vertical-align: 'top';
+    margin-left: 10px;
+    margin-right: 10px;
+}

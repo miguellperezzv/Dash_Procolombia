@@ -38,9 +38,9 @@ dropdowns = dbc.Col([
                 id='dropdown_countryy',
             ),
     ], lg=10, md=12),
+    html.P("alemania", id="dummy"),
     
-    
-] )
+] ,className="dropdowns")
 
 
 content = html.Div(
@@ -53,7 +53,7 @@ content = html.Div(
         dbc.Col([
            dcc.Graph(id="graph-inner"),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
-        ], lg =9, md = 12),
+        ], lg =8, md = 12),
         ]
             
         ),
@@ -75,9 +75,19 @@ content = html.Div(
         #content_fourth_row,
         
     ],
+    className="contentDiv"
     #style=style.CONTENT_STYLE
 )
 
 
 
+@callback(
+    Output("graph-inner", "figure"), 
+    #Input("dropdown-country", "value"))
+    Input("dummy", "children"))
 
+def displayProphet(country):
+    print(country)
+    print("Displaying prophet")
+    fig = graficos.prophet(country)
+    return fig
