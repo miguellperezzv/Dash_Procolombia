@@ -5,7 +5,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 from app import sidebar
 from components import content, navbar
-from logica import  graficos
+from logica import  controlador
 import plotly.express as px
 from assets import style
 import numpy as np
@@ -47,6 +47,16 @@ def displayProphet(country):
 def selectedCountry(country):
     print(country)
     return "General Summary ("+str(country)+")"
+
+
+@app.callback(
+    Output("dropdown-country", "options"),
+    Output("dropdown-country", "value"),
+    Input("dropdown-region", "value")
+)
+def loadDropdownCountries(region):
+    options = controlador.getCountriesByRegion(region)
+    return options, options[0]
 
 
 if __name__ == '__main__':

@@ -5,6 +5,7 @@ from dash import html,  callback
 import pandas as pd
 from dash import html,  callback
 from dash.dependencies import Input, Output
+from logica import controlador
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
@@ -33,6 +34,9 @@ general_summary = dbc.Row([
 @callback(
     Output('col_summary', 'children'),
     Input('dropdown_promotion_activity', 'value'),
+    Input('dropdown_country', 'value'),
 )
-def generateGeneralStats(activities):
+def generateGeneralStats(activities, country):
     print(activities)
+    print(country)
+    #graficos

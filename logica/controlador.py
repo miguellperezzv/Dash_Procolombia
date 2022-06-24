@@ -14,7 +14,7 @@ from prophet.plot import plot_plotly, plot_components_plotly
 campañas=pd.read_csv('data\\campañas.csv', sep = '|') 
 vuelos=pd.read_csv('data\\vuelos.csv', sep = '|') 
 #vuelos=pd.read_csv('D:\Descargas\\vuelos.csv') 
-
+oficinas = pd.read_csv('data\\oficinas_comerciales.csv')
 
 
 
@@ -76,5 +76,10 @@ def prophet(country):
 
 
 def getCountries():
-    print(countries[0])
-    return countries
+    return oficinas["Paises"].unique()
+
+def getCountriesByRegion(region):
+    return oficinas[oficinas["Region "] == region]["Paises"].unique()
+
+def getRegions():
+    return oficinas["Region "].unique()

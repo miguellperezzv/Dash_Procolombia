@@ -6,7 +6,7 @@ from components.summary import details_table, general_summary
 
 import plotly.express as px
 from assets import style
-from logica import graficos
+from logica import controlador
 
 
 
@@ -18,8 +18,8 @@ dropdowns = dbc.Col([
     
     dbc.Col([
         dcc.Dropdown(
-                ['Agenda comercial de turismo', 'Agendas de Cooperación', 'Capacitaciones y presentaciones de destino', 'FAM - PRESS Trips', 'Feria internacional de Turismo', 'Macrorruedas y Encuentros Comerciales', 'Primera Visita', 'Entrega informacion valor agregado', 'Otras Acciones promocion turismo', 'Preparación y adecuación '],
-                'Primera Visita',
+                options = [{'label': t, 'value': t} for t in controlador.getRegions()],
+                value = controlador.getRegions()[0],
                 clearable=False,
                 id="dropdown_region",
             ),
@@ -32,10 +32,12 @@ dropdowns = dbc.Col([
     
     dbc.Col([
         dcc.Dropdown(
-                options=graficos.getCountries(), 
-                value = graficos.getCountries()[0],  
+                #options=[{'label': t, 'value': t} for t in test], 
+                #value = graficos.getCountries()[0],  
+                options = [{'label': t, 'value': t} for t in controlador.getCountries()],
+                value = controlador.getCountries()[0],
                 clearable=False,
-                id='dropdown_countryy',
+                id='dropdown_country',
             ),
     ], lg=10, md=12),
     html.P("alemania", id="dummy"),
@@ -89,5 +91,6 @@ content = html.Div(
 def displayProphet(country):
     print(country)
     print("Displaying prophet")
-    fig = graficos.prophet(country)
+    fig = controlador.prophet(country)
     return fig
+
