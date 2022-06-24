@@ -94,3 +94,11 @@ def displayProphet(country):
     fig = controlador.prophet(country)
     return fig
 
+@callback(
+    Output("dropdown-country", "options"),
+    Output("dropdown-country", "value"),
+    Input("dropdown-region", "value")
+)
+def loadDropdownCountries(region):
+    options = controlador.getCountriesByRegion(region)
+    return options, options[0]
