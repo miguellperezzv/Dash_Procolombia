@@ -18,10 +18,10 @@ dropdowns = dbc.Col([
     
     dbc.Col([
         dcc.Dropdown(
+                id="dropdown_region",
                 options = [{'label': t, 'value': t} for t in controlador.getRegions()],
                 value = controlador.getRegions()[0],
-                clearable=False,
-                id="dropdown_region",
+                clearable=False,  
             ),
     ],lg=10, md=12),
     html.Br(),

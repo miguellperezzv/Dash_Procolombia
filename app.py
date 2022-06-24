@@ -12,14 +12,26 @@ import numpy as np
 
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
-#app.config['suppress_callback_exceptions'] = False
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app.config['suppress_callback_exceptions'] = True
 
 
 
 app.layout = html.Div([
+
     navbar.navbar,
-    content.content,
+    html.Br(),
+    dbc.Col([
+        dcc.Tabs(id="tabs", value='tab_option', children=[
+        dcc.Tab(label='Visualization', value='tab_visualization'),
+        dcc.Tab(label='Load', value='tab_load'),
+    ]),
+    ]),
+    dbc.Col([
+        html.Div(id='tab_general')
+    ]),
+    #content.content,
+
     
 
 ], className="principalDiv")
@@ -58,6 +70,14 @@ def loadDropdownCountries(region):
     options = controlador.getCountriesByRegion(region)
     return options, options[0]
 
+
+@app.callback(Output('tab_general', 'children'),
+              Input('tabs', 'value'))
+def render_content(tab):
+    if tab == 'tab_visualization':
+        return content.content
+    elif tab == 'tab_load':
+        return dbc.Col(["Hola Mundo"])
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
