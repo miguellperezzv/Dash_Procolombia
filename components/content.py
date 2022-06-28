@@ -48,7 +48,7 @@ dropdowns = dbc.Col([
 content = html.Div(
     [
         
-        html.H2('Visitors Predicitions (by Region)', style={"text-align":"center"}),
+        html.H2('Visitors Predicitions (by Region)', style={"text-align":"center"}, id = "lblVisitors"),
         html.Hr(),
         dbc.Row([
         dropdowns,
@@ -61,7 +61,7 @@ content = html.Div(
         ),
         
         html.Hr(),
-        html.H2('Touristic promotion activities: Level of Influence by region', style={"text-align":"center"}),
+        html.H2('Touristic promotion activities: Level of Influence by region', style={"text-align":"center"}, id = "lblInfluence"),
         dbc.Col([
             
             details_table
@@ -95,10 +95,20 @@ def displayProphet(country):
     return fig
 
 @callback(
-    Output("dropdown-country", "options"),
-    Output("dropdown-country", "value"),
-    Input("dropdown-region", "value")
+    Output("dropdown_country", "options"),
+    Output("dropdown_country", "value"),
+    Input("dropdown_region", "value")
 )
 def loadDropdownCountries(region):
     options = controlador.getCountriesByRegion(region)
     return options, options[0]
+
+@callback(
+    Output("lblGeneralSummary", "children"),
+    Output("lblVisitors", "children"),
+    Output("lblInfluence", "children"),
+    Input("dropdown_country", "value"),
+    Input("dropdown_region", "value")
+)
+def reloadTitles(country, region):
+    return "General Summary "+ "("+ country+")",  "Visitors Predicitions (" + region+")",  "Touristic promotion activities: Level of Influence in (" + region+")"

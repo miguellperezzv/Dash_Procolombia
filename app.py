@@ -12,8 +12,8 @@ import numpy as np
 
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-app.config['suppress_callback_exceptions'] = True
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+#app.config['suppress_callback_exceptions'] = True
 
 
 
@@ -52,13 +52,6 @@ def displayProphet(country):
     return fig
 """
 
-@app.callback(
-    Output('lblGeneralSummary', 'children'),
-    Input("select-country", "value")
-)
-def selectedCountry(country):
-    print(country)
-    return "General Summary ("+str(country)+")"
 
 
 
