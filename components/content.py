@@ -40,7 +40,7 @@ dropdowns = dbc.Col([
                 id='dropdown_country',
             ),
     ], lg=10, md=12),
-    html.P("alemania", id="dummy"),
+    
     
 ] ,className="dropdowns")
 

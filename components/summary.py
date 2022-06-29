@@ -15,6 +15,10 @@ details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i
 general_summary = dbc.Row([
     dbc.Col([
         #html.P(html.B("Select a promotion activity: "))
+        dbc.Row([
+            dcc.Graph(id="graph-inner"),
+        ])
+
     ],lg=9, md=9, id="col_summary"), 
     dbc.Col([
         dbc.Row(html.P(html.B("Select a promotion activity: "))),
