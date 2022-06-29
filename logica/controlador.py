@@ -19,7 +19,7 @@ oficinas = pd.read_csv('data\\oficinas_comerciales.csv')
 
 
 countries = vuelos['pais_ori'].unique()
-
+finalCSV = pd.read_csv('data\\final.csv', sep = "|")
 
 
 def prophet(country):
@@ -76,10 +76,11 @@ def prophet(country):
 
 
 def getCountries():
-    return oficinas["Paises"].unique()
+    return finalCSV["pais"].unique()
 
 def getCountriesByRegion(region):
-    return oficinas[oficinas["Region "] == region]["Paises"].unique()
+    return finalCSV[finalCSV["hub"] == region]["pais"].unique()
+    
 
 def getRegions():
-    return oficinas["Region "].unique()
+    return finalCSV["hub"].unique()

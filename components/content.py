@@ -53,7 +53,7 @@ content = html.Div(
         dbc.Row([
         dropdowns,
         dbc.Col([
-           dcc.Graph(id="graph-inner"),
+           dcc.Graph(id="graph_prophet"),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
         ], lg =8, md = 12),
         ]
@@ -84,9 +84,9 @@ content = html.Div(
 
 
 @callback(
-    Output("graph-inner", "figure"), 
-    #Input("dropdown-country", "value"))
-    Input("dummy", "children"))
+    Output("graph_prophet", "figure"), 
+    Input("dropdown_country", "value")
+    )
 
 def displayProphet(country):
     print(country)
