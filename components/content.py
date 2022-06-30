@@ -2,8 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
 from dash.dependencies import Input, Output, State
-from components.summary import details_table, general_summary
-
+from components import summary
 import plotly.express as px
 from assets import style
 from logica import controlador
@@ -64,18 +63,14 @@ content = html.Div(
         html.H2('Touristic promotion activities: Level of Influence by region', style={"text-align":"center"}, id = "lblInfluence"),
         dbc.Col([
             
-            details_table
+            summary.details_table
         ],lg=9, md=12),
         html.Hr(),
         html.H2('General Summary by country', style={"text-align":"center"}, id="lblGeneralSummary"),
           
-        general_summary,
+        summary.general_summary
         
-        #content_first_row,
-        #content_second_row,
-        #content_third_row,
-        #content_fourth_row,
-        
+       
     ],
     className="contentDiv"
     #style=style.CONTENT_STYLE
