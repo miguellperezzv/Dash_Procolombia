@@ -2,11 +2,12 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
 from dash.dependencies import Input, Output, State
-from components.summary import details_table, general_summary, actividades
+from logica.controlador import  actividades
 
 import plotly.express as px
 from assets import style
 from logica import controlador
+from dash import dash_table
 
 
 
@@ -40,7 +41,12 @@ content = html.Div(
         dbc.Row([
         dropdowns,
         dbc.Col([
-           dcc.Graph(id="graph_prophet_destacado"),
+
+            dcc.Loading(
+                    id="ls-loading-2_destacado",
+                    children=[dcc.Graph(id="graph_prophet_destacado"),],
+                    type="circle",
+                ),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
         ], lg =8, md = 12),
         ]
@@ -48,13 +54,22 @@ content = html.Div(
         ),
         
         html.Hr(),
-        html.H2('Touristic promotion activities: Level of Influence by Country', style={"text-align":"center"}, id = "lblInfluenceDestacado"),
-        dbc.Col([
+        html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluenceDestacado"),
+        
+        dcc.Loading(
+                    id="ls-loading-2_destacado",
+                    children=[
+                        dbc.Col([
             
-            details_table
-        ],lg=9, md=12),
+                        #summary.details_table
+                ],lg=9, md=12, id="influence_table_destacado"),
+                    ],
+                    type="circle",
+                ),
+
+
         html.Hr(),
-        html.H2('General Summary by country', style={"text-align":"center"}, id="lblGeneralSummaryDestacado"),
+        html.H2('Resumen General por', style={"text-align":"center"}, id="lblGeneralSummaryDestacado"),
           
         dbc.Row([
     dbc.Col([
@@ -65,7 +80,7 @@ content = html.Div(
 
     ],lg=9, md=9, id="col_summary"), 
     dbc.Col([
-        dbc.Row(html.P(html.B("Select a promotion activity: "))),
+        dbc.Row(html.P(html.B("Seleccione un grupo de actividades de promoción: "))),
        
             dcc.Dropdown(
                 options=actividades,
@@ -98,9 +113,17 @@ content = html.Div(
 def displayProphet(country):
     print(country)
     print("Displaying prophet")
-    fig = controlador.prophet(country)
+    fig = controlador.prophet(country, 2)
+
     return fig
 
+@callback(
+    Output("influence_table_destacado", "children"),
+    Input("dropdown_region_destacado", "value")
+)
+def display_influence_table(hub):
+    table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 
 @callback(
@@ -110,5 +133,5 @@ def displayProphet(country):
     Input("dropdown_country_destacado", "value"),
 )
 def reloadTitles(country):
-    return "General Summary "+ "("+ country+")",  "Visitors Predicitions (" + country+")",  "Touristic promotion activities: Level of Influence in (" + country+")"
+    return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country+")"
 

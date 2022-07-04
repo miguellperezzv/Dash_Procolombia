@@ -14,16 +14,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar
 details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
 #details_table = controlador.tabla_influencia_variable()
 
-actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}, 
-                        {'label' : 'Agendas de Cooperación', 'value' :'x2'}, 
-                        {'label' : 'Capacitaciones y presentaciones de destino' , 'value' : 'x3'}, 
-                        {'label': 'FAM - PRESS Trips','value' : 'x4'}, 
-                        {'label':'Feria internacional de Turismo' , 'value' :'x5'}, 
-                        {'label':'Macrorruedas y Encuentros Comerciales' ,'value' : 'x6'},
-                        {'label':'Primera Visita', 'value' :'x7'}, 
-                        {'label':'Entrega informacion valor agregado' ,'value' : 'x8'}, 
-                        {'label':'Otras Acciones promocion turismo' ,'value' : 'x9'}, 
-                        {'label':'Preparación y adecuación ','value' : 'x10'}]
+
 
 general_summary = dbc.Row([
     dbc.Col([
@@ -42,8 +33,8 @@ general_summary = dbc.Row([
         dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
             dcc.Dropdown(
-                options=actividades,
-                value=actividades[0]["label"],
+                options=controlador.actividades,
+                value=controlador.actividades[0]["label"],
                 #options=controlador.getActividades(),
                 #value=controlador.getActividades(),
                 clearable=False,

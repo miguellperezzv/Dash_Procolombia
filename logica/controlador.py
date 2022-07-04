@@ -15,7 +15,6 @@ import os
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 import xgboost as xgb
-
 from sklearn.metrics import mean_squared_error #MSE
 from sklearn.metrics import mean_absolute_error #MAE
 
@@ -24,7 +23,16 @@ from sklearn.metrics import mean_absolute_error #MAE
 finalCSV = pd.read_csv('data\\final.csv', sep = "|")
 df = pd.read_csv('data\\final.csv', sep = "|")
 
-
+actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}, 
+                        {'label' : 'Agendas de Cooperación', 'value' :'x2'}, 
+                        {'label' : 'Capacitaciones y presentaciones de destino' , 'value' : 'x3'}, 
+                        {'label': 'FAM - PRESS Trips','value' : 'x4'}, 
+                        {'label':'Feria internacional de Turismo' , 'value' :'x5'}, 
+                        {'label':'Macrorruedas y Encuentros Comerciales' ,'value' : 'x6'},
+                        {'label':'Primera Visita', 'value' :'x7'}, 
+                        {'label':'Entrega informacion valor agregado' ,'value' : 'x8'}, 
+                        {'label':'Otras Acciones promocion turismo' ,'value' : 'x9'}, 
+                        {'label':'Preparación y adecuación ','value' : 'x10'}]
 
 def display_map_single_country(start_date,end_date, hub): 
     f_start_date = start_date.date()
@@ -89,6 +97,14 @@ def display_time_series(hub,selected_countries):
 def display_barplot(selected_countries,selected_activities):
     dff=df[df['pais'].isin(selected_countries)]
     dff=dff.groupby(['pais']).sum().reset_index()
+       
+    actPromocion = []
+    for i in selected_activities:
+        for act in actividades:
+            if act["value"] == i:
+                actPromocion.append(act["label"])
+    
+    print("actividades son !!! --------->" + str(actPromocion))
 
     fig = px.bar(dff, x="pais",
                  y=selected_activities,
@@ -282,7 +298,7 @@ def tabla_influencia_variable(hub, rez):
         modelo=joblib.load('modelos/'+hub+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
     else:
         modelo=joblib.load('modelos/'+hub+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
-    importancias=list(modelo.feature_importances_)
+    importancias=list(modelo.feature_importances_.round(5))
 
     a=['pais','cantidad_ciudades','educacion',
        'eventos', 'negocios', 'otros', 'religion', 'salud', 'sin_motivo',
