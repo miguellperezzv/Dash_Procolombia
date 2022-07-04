@@ -6,6 +6,7 @@ from components import summary
 import plotly.express as px
 from assets import style
 from logica import controlador
+import time
 
 
 
@@ -52,7 +53,12 @@ content = html.Div(
         dbc.Row([
         dropdowns,
         dbc.Col([
-           dcc.Graph(id="graph_prophet"),
+
+            dcc.Loading(
+                    id="ls-loading-2",
+                    children=[dcc.Graph(id="graph_prophet"),],
+                    type="circle",
+                ),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
         ], lg =8, md = 12),
         ]
@@ -87,6 +93,7 @@ def displayProphet(country):
     print(country)
     print("Displaying prophet")
     fig = controlador.prophet(country, 2)
+
     return fig
 
 @callback(
@@ -97,6 +104,14 @@ def displayProphet(country):
 def loadDropdownCountries(region):
     options = controlador.getCountriesByRegion(region)
     return options, options[0]
+
+@callback(
+    Output("graph_prophet2", "children"), 
+    Input("dropdown_country", "value"))
+def input_triggers_nested(value):
+    time.sleep(1)
+    return value
+
 
 @callback(
     Output("lblGeneralSummary", "children"),
