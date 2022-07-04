@@ -20,15 +20,7 @@ from sklearn.metrics import mean_squared_error #MSE
 from sklearn.metrics import mean_absolute_error #MAE
 
 
-#campañas=pd.read_csv('D:\Descargas\\campañas.csv') 
-campañas=pd.read_csv('data\\campañas.csv', sep = '|') 
-vuelos=pd.read_csv('data\\vuelos.csv', sep = '|') 
-#vuelos=pd.read_csv('D:\Descargas\\vuelos.csv') 
-oficinas = pd.read_csv('data\\oficinas_comerciales.csv')
 
-
-
-countries = vuelos['pais_ori'].unique()
 finalCSV = pd.read_csv('data\\final.csv', sep = "|")
 df = pd.read_csv('data\\final.csv', sep = "|")
 
@@ -305,6 +297,16 @@ def tabla_influencia_variable(hub, rez):
     table=pd.DataFrame(a, columns = ['variables'])
     table['importancias']=importancias
     table = table.sort_values('importancias',ascending=False).reset_index(drop=True)
+    print("TABLA TIPO " +str(type(table)))
+    buenos=['agenda_comercial_de_turismo', 'agendas_de_cooperacion/_misiones',
+        'capacitaciones_y_presentaciones_de_destino',
+        'entrega_informacion_valor_agregado', 'fam_-_press_trips',
+        'feria_internacional_de_turismo',
+        'macrorruedas_y_encuentros_comerciales',
+        'otras_acciones_promocion_turismo', 'primera_visita']
+    tableActividades = table[table.variables.isin(buenos)]
+    table
+    return table, tableActividades
     #table
 
 

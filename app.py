@@ -24,7 +24,7 @@ app.layout = html.Div([
     dbc.Col([
         dcc.Tabs(id="tabs", value='tab_option', children=[
         dcc.Tab(label='Visualización por países', value='tab_paises'),
-        dcc.Tab(label='Visualización por Hubs', value='tab_hubs'),
+        dcc.Tab(label='Países destacados', value='tab_destacados'),
         dcc.Tab(label='Load', value='tab_load'),
         
 
@@ -41,22 +41,6 @@ app.layout = html.Div([
 
 
 
-"""
-###En dado caso que no funcione el callback en el archivo content
-@app.callback(
-    Output("graph-inner", "figure"), 
-    #Input("dropdown-country", "value"))
-    Input("dummy", "children"))
-
-def displayProphet(country):
-    print(country)
-    print("Displaying prophet")
-    fig = graficos.prophet(country)
-    return fig
-"""
-
-
-
 
 
 
@@ -67,7 +51,7 @@ def render_content(tab):
         return content.content
     elif tab == 'tab_load':
         return dbc.Col(["Hola Mundo"])
-    elif tab == "tab_hubs":
+    elif tab == "tab_destacados":
         return destacados.content
 
 if __name__ == '__main__':

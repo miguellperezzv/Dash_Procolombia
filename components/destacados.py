@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
 from dash.dependencies import Input, Output, State
-from components.summary import details_table, general_summary
+from components.summary import details_table, general_summary, actividades
 
 import plotly.express as px
 from assets import style
@@ -14,7 +14,7 @@ dropdowns = dbc.Col([
 
 
     dbc.Col([
-        html.P(html.B("Select a Country: ")),  
+        html.P(html.B("Seleccione un país: ")),  
     ]),
     
     dbc.Col([
@@ -35,7 +35,7 @@ dropdowns = dbc.Col([
 content = html.Div(
     [
         
-        html.H2('Visitors Predicitions (by Country)', style={"text-align":"center"}, id = "lblVisitorsDestacado"),
+        html.H2('Predicción de visitantes', style={"text-align":"center"}, id = "lblVisitorsDestacado"),
         html.Hr(),
         dbc.Row([
         dropdowns,
@@ -68,8 +68,8 @@ content = html.Div(
         dbc.Row(html.P(html.B("Select a promotion activity: "))),
        
             dcc.Dropdown(
-                options=['Agenda comercial de turismo', 'Agendas de Cooperación', 'Capacitaciones y presentaciones de destino', 'FAM - PRESS Trips', 'Feria internacional de Turismo', 'Macrorruedas y Encuentros Comerciales', 'Primera Visita', 'Entrega informacion valor agregado', 'Otras Acciones promocion turismo', 'Preparación y adecuación '],
-                value="Agendas de Cooperación",
+                options=actividades,
+                value=actividades[0]["label"],
                 clearable=False,
                 id="dropdown_promotion_activity_destacado",
                 multi=True

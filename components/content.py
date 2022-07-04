@@ -7,6 +7,7 @@ import plotly.express as px
 from assets import style
 from logica import controlador
 import time
+from dash import dash_table
 
 
 
@@ -67,10 +68,19 @@ content = html.Div(
         
         html.Hr(),
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence"),
-        dbc.Col([
+        
+        dcc.Loading(
+                    id="ls-loading-2",
+                    children=[
+                        dbc.Col([
             
-            summary.details_table
-        ],lg=9, md=12, id="influence_table"),
+                        #summary.details_table
+                ],lg=9, md=12, id="influence_table"),
+                    ],
+                    type="circle",
+                ),
+        
+        
         html.Hr(),
         html.H2('Resumen General por país', style={"text-align":"center"}, id="lblGeneralSummary"),
           
@@ -112,7 +122,8 @@ def loadDropdownCountries(region):
     Input("dropdown_region", "value")
 )
 def display_influence_table(hub):
-    return controlador.tabla_influencia_variable(hub, 2)
+    table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 @callback(
     Output("lblGeneralSummary", "children"),
