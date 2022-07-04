@@ -12,6 +12,7 @@ from datetime import date
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
+#details_table = controlador.tabla_influencia_variable()
 
 actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}, 
                         {'label' : 'Agendas de Cooperación', 'value' :'x2'}, 
@@ -78,6 +79,8 @@ def generateGeneralStats(activities, country):
     print(activities)
     print(country)
     #graficos
+
+
 
 @callback(
     Output("graph_hub", "figure"),

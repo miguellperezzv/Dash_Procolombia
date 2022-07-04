@@ -70,7 +70,7 @@ content = html.Div(
         dbc.Col([
             
             summary.details_table
-        ],lg=9, md=12),
+        ],lg=9, md=12, id="influence_table"),
         html.Hr(),
         html.H2('Resumen General por país', style={"text-align":"center"}, id="lblGeneralSummary"),
           
@@ -105,13 +105,14 @@ def loadDropdownCountries(region):
     options = controlador.getCountriesByRegion(region)
     return options, options[0]
 
-@callback(
-    Output("graph_prophet2", "children"), 
-    Input("dropdown_country", "value"))
-def input_triggers_nested(value):
-    time.sleep(1)
-    return value
 
+
+@callback(
+    Output("influence_table", "children"),
+    Input("dropdown_region", "value")
+)
+def display_influence_table(hub):
+    return controlador.tabla_influencia_variable(hub, 2)
 
 @callback(
     Output("lblGeneralSummary", "children"),
