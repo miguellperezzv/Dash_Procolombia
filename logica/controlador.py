@@ -9,6 +9,7 @@ import prophet as prp
 from dash import Dash, dcc, html, Input, Output, callback
 from prophet.plot import plot_plotly, plot_components_plotly
 import plotly.graph_objects as go
+import plotly.express as px
 
 
 #campañas=pd.read_csv('D:\Descargas\\campañas.csv') 
@@ -123,6 +124,31 @@ def display_map_single_country(start_date,end_date, hub):
     ))
     return fig
 
+def display_time_series(hub,selected_countries):
+    dff=df[df['pais'].isin(selected_countries)]
+    dff=dff.groupby(['pais','llave']).sum().reset_index()
+    fig=px.line(dff,x="llave",
+                y="pasajeros", 
+                color="pais", 
+                title='Pasajeros por mes en el país',
+                labels={"llave":"fecha"})
+    fig.update_xaxes(
+        dtick="M6",
+        tickformat="%b\n%Y")
+    return fig
+
+
+def display_barplot(selected_countries,selected_activities):
+    dff=df[df['pais'].isin(selected_countries)]
+    dff=dff.groupby(['pais']).sum().reset_index()
+
+    fig = px.bar(dff, x="pais",
+                 y=selected_activities,
+                 text_auto=True,
+                 title="Total actividades de promoción por en el país",
+                 labels={"variable":"actividad","value":"cantidad"})
+    return fig
+
 
 
 
@@ -137,5 +163,5 @@ def getRegions():
     return finalCSV["hub"].unique()
 
 def getActividades():
-    
+
     return finalCSV[""]
