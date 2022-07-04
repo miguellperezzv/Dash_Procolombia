@@ -111,3 +111,4 @@ def displayProphet(country):
 )
 def reloadTitles(country):
     return "General Summary "+ "("+ country+")",  "Visitors Predicitions (" + country+")",  "Touristic promotion activities: Level of Influence in (" + country+")"
+

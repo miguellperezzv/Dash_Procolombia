@@ -8,6 +8,7 @@ import statsmodels.formula.api as smf
 import prophet as prp
 from dash import Dash, dcc, html, Input, Output, callback
 from prophet.plot import plot_plotly, plot_components_plotly
+import plotly.graph_objects as go
 
 
 #campañas=pd.read_csv('D:\Descargas\\campañas.csv') 
@@ -20,6 +21,7 @@ oficinas = pd.read_csv('data\\oficinas_comerciales.csv')
 
 countries = vuelos['pais_ori'].unique()
 finalCSV = pd.read_csv('data\\final.csv', sep = "|")
+df = pd.read_csv('data\\final.csv', sep = "|")
 
 
 def prophet(country):
@@ -73,6 +75,55 @@ def prophet(country):
     figFinal = plot_plotly(m1, forecast)
     print("Prophet for country: "+country)
     return figFinal
+
+
+def display_map_single_country(start_date,end_date, hub): 
+    f_start_date = start_date.date()
+    start_date = pd.to_datetime(f_start_date)
+    f_end_date = end_date.date()
+    end_date = pd.to_datetime(f_end_date)
+    
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    
+    #Should create a new column to map called "codigo_pais"
+    espana_key=df.iloc[2670]['pais']
+    country_codes={'alemania': 'DEU', 'antigua_y_barbuda': 'ATG', 'argentina': 'ARG','aruba': 'ABW', 'australia': 'AUS', 'austria': 'AUT', 'azerbaiyan': 'AZE', 'bahrein': 'BHR', 'barbados': 'BRB', 'belgica': 'BEL', 'bolivia': 'BOL', 'brasil': 'BRA', 'bulgaria': 'BGR', 'canada': 'CAN', 'chile': 'CHL', 'china': 'CHN', 'chipre': 'CYP', 'costa_rica': 'CRI', 'croacia': 'HRV', 'cuba': 'CUB', 'dinamarca': 'DNK', 'ecuador': 'ECU', 'egipto': 'EGY', 'el_salvador':'SLV', espana_key: 'ESP', 'estados_unidos': 'USA', 'estonia': 'EST', 'filipinas': 'PHL', 'finlandia': 'FIN', 'francia': 'FRA', 'granada': 'GRD', 'grecia': 'GRC', 'guatemala': 'GTM', 'guyana': 'GUY', 'hungria': 'HUN', 'india': 'IND', 'indonesia': 'IDN', 'islas_caiman': 'CYM', 'israel': 'ISR', 'italia': 'ITA', 'jamaica': 'JAM', 'japon': 'JPN', 'kuwait': 'KWT','letonia': 'LVA','lituania': 'LTU', 'luxemburgo': 'LUX', 'malasia': 'MYS', 'malta': 'MLT', 'mexico': 'MEX', 'monaco': 'MCO', 'nicaragua': 'NIC', 'noruega': 'NOR', 'nueva_zelanda': 'NZL','paises_bajos': 'NLD', 'panama': 'PAN', 'paraguay': 'PRY', 'peru': 'PER', 'polonia': 'POL', 'portugal': 'PRT', 'puerto_rico': 'PRI', 'reino_unido': 'GBR','republica_dominicana': 'DOM', 'rumania': 'ROU', 'rusia': 'RUS', 'santa_lucia': 'LCA','singapur': 'SGP','sri_lanka': 'LKA', 'suecia': 'SWE', 'suiza': 'CHE', 'surinam': 'SUR', 'tailandia': 'THA', 'taiwan': 'TWN', 'turquia': 'TUR', 'ucrania': 'UKR', 'venezuela': 'VEN', 'albania': 'ALB', 'qatar': 'QAT', 'republica_checa': 'CZE'}
+    dff = dff.copy()
+    dff['codigo_pais'] = dff['pais'].map(country_codes)
+    
+    
+    dff = dff.groupby(["pais", "codigo_pais", "hub"]).sum().reset_index()
+
+    fig = go.Figure(data=go.Choropleth(
+        #locations = dff['codigo_pais'],
+        #locations = dff[dff['hub'] == hub]['codigo_pais'],
+        locations=dff[dff['hub'] == hub]['codigo_pais'],
+        #zoom=("united states of america", "canada", "mexico"),
+        
+        z = dff[dff['hub'] == hub]['pasajeros'],
+        text = dff[dff['hub'] == hub]['codigo_pais'],
+        colorscale = 'Viridis',
+        autocolorscale=False,
+        marker_line_color='darkgray',
+        marker_line_width=0.5,
+        colorbar_title = 'Pasajeros',
+    ))
+
+    fig.update_layout(
+        title_text='Pasajeros por país en el rango de fechas seleccionado',
+        geo=dict(
+            showframe=False,
+            showcoastlines=False,
+            landcolor = 'lightgray',
+            showland = False,
+            showcountries = True,
+            countrycolor = 'gray',
+            countrywidth = 0.5,
+    ))
+    return fig
+
+
 
 
 def getCountries():

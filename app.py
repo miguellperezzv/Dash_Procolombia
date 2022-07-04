@@ -23,9 +23,10 @@ app.layout = html.Div([
     html.Br(),
     dbc.Col([
         dcc.Tabs(id="tabs", value='tab_option', children=[
-        dcc.Tab(label='Visualization', value='tab_visualization'),
+        dcc.Tab(label='Visualización por países', value='tab_paises'),
+        dcc.Tab(label='Visualización por Hubs', value='tab_hubs'),
         dcc.Tab(label='Load', value='tab_load'),
-        dcc.Tab(label='Países Destacados', value='tab_destacados'),
+        
 
     ]),
     ]),
@@ -62,11 +63,11 @@ def displayProphet(country):
 @app.callback(Output('tab_general', 'children'),
               Input('tabs', 'value'))
 def render_content(tab):
-    if tab == 'tab_visualization':
+    if tab == 'tab_paises':
         return content.content
     elif tab == 'tab_load':
         return dbc.Col(["Hola Mundo"])
-    elif tab == "tab_destacados":
+    elif tab == "tab_hubs":
         return destacados.content
 
 if __name__ == '__main__':

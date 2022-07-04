@@ -1,3 +1,4 @@
+from subprocess import call
 from dash import dash_table
 import dash_bootstrap_components as dbc
 from dash import dcc
@@ -6,6 +7,7 @@ import pandas as pd
 from dash import html,  callback
 from dash.dependencies import Input, Output
 from logica import controlador
+from datetime import datetime as dt
 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
@@ -14,13 +16,11 @@ details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i
 
 general_summary = dbc.Row([
     dbc.Col([
-        #html.P(html.B("Select a promotion activity: "))
-        dbc.Col([
-            #dcc.Graph(id="graph_1"),
-            
+        dbc.Row([
+            dcc.Graph(id="graph_hub"),
         ])
 
-    ],lg=9, md=9, id="col_summary"), 
+    ],lg=9, md=9), 
     dbc.Col([
         dbc.Row(html.P(html.B("Select a promotion activity: "))),
        
@@ -45,3 +45,12 @@ def generateGeneralStats(activities, country):
     print(activities)
     print(country)
     #graficos
+
+@callback(
+    Output("graph_hub", "figure"),
+    Input ('dropdown_region', 'value')
+)
+def generateGraphHub(region):
+    start_date = dt(2012, 1, 1)
+    end_date = dt(2020, 12, 1)
+    return controlador.display_map_single_country(start_date,end_date, region)

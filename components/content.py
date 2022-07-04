@@ -12,7 +12,7 @@ from logica import controlador
 dropdowns = dbc.Col([
 
     dbc.Col([
-        html.P(html.B("Select a Region: ")),  
+        html.P(html.B("Seleccione una región: ")),  
     ]),
     
     dbc.Col([
@@ -26,7 +26,7 @@ dropdowns = dbc.Col([
     html.Br(),
 
     dbc.Col([
-        html.P(html.B("Select a Country: ")),  
+        html.P(html.B("Seleccione un país: ")),  
     ]),
     
     dbc.Col([
@@ -47,7 +47,7 @@ dropdowns = dbc.Col([
 content = html.Div(
     [
         
-        html.H2('Visitors Predicitions (by Region)', style={"text-align":"center"}, id = "lblVisitors"),
+        html.H2('Predicción de visitantes por País ', style={"text-align":"center"}, id = "lblVisitors"),
         html.Hr(),
         dbc.Row([
         dropdowns,
@@ -60,13 +60,13 @@ content = html.Div(
         ),
         
         html.Hr(),
-        html.H2('Touristic promotion activities: Level of Influence by region', style={"text-align":"center"}, id = "lblInfluence"),
+        html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence"),
         dbc.Col([
             
             summary.details_table
         ],lg=9, md=12),
         html.Hr(),
-        html.H2('General Summary by country', style={"text-align":"center"}, id="lblGeneralSummary"),
+        html.H2('Resumen General por país', style={"text-align":"center"}, id="lblGeneralSummary"),
           
         summary.general_summary
         
@@ -106,4 +106,4 @@ def loadDropdownCountries(region):
     Input("dropdown_region", "value")
 )
 def reloadTitles(country, region):
-    return "General Summary "+ "("+ country+")",  "Visitors Predicitions (" + region+")",  "Touristic promotion activities: Level of Influence in (" + region+")"
+    return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + country+")"
