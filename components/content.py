@@ -86,7 +86,7 @@ content = html.Div(
 def displayProphet(country):
     print(country)
     print("Displaying prophet")
-    fig = controlador.prophet(country)
+    fig = controlador.prophet(country, 2)
     return fig
 
 @callback(

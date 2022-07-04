@@ -24,7 +24,7 @@ countries = vuelos['pais_ori'].unique()
 finalCSV = pd.read_csv('data\\final.csv', sep = "|")
 df = pd.read_csv('data\\final.csv', sep = "|")
 
-
+"""
 def prophet(country):
     
     a=vuelos.groupby(['llave','pais_ori']).sum().reset_index()
@@ -77,6 +77,7 @@ def prophet(country):
     print("Prophet for country: "+country)
     return figFinal
 
+"""
 
 def display_map_single_country(start_date,end_date, hub): 
     f_start_date = start_date.date()
@@ -150,7 +151,82 @@ def display_barplot(selected_countries,selected_activities):
     return fig
 
 
+def rezagos_pais(final,pais,rezagos):
+    if rezagos==0:
+        verificacion=final[final['pais']==pais]
+    else:
+        datos=final[final['pais']==pais]
+        datos.set_index('llave',inplace = True)
+        d=pd.DataFrame([])
+        c=datos[['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9', 'trm', 'estaciones', 'ipc', 'carnavales', 'holiday']]
+        c=c.shift(periods=rezagos)
+        d=pd.concat([d,c])
+        d = d.dropna(how='all')
+        d=d.reset_index()
+        datos=datos.drop(['pais','x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9', 'trm', 'estaciones', 'ipc', 'carnavales', 'holiday'], axis=1)
+        datos=datos.reset_index()
+        verificacion=pd.merge(datos,d, on= ['llave'],how='inner')        
+        verificacion=verificacion[['llave','x1','x2','x3','x4','x5','x6','x7','x8','x9', 'trm', 'estaciones', 'ipc', 'carnavales', 'holiday']]
+        verificacion.columns=['ds','x1','x2','x3','x4','x5','x6','x7','x8','x9', 'trm', 'estaciones', 'ipc', 'carnavales', 'holiday']
+        verificacion['ds']= pd.to_datetime(verificacion['ds'])
+        
+        
+        "poner las extras a la serie"
+        c=final[final['pais']==pais][['llave','pasajeros']]
+        c.columns = ['ds', 'y']
+        c['ds']= pd.to_datetime(c['ds'])
+        ejercicio=pd.merge(c, verificacion, on='ds',how='left').fillna(0)
+    return ejercicio
 
+
+def prophet(pais, numRezagos):
+    b=rezagos_pais(finalCSV,pais,numRezagos)
+    dif = pd.DataFrame()
+    dif['llave'] = b['ds']
+    var = ['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9']
+    for v in var:
+        m1 = prp.Prophet()
+        for k in var:
+            if(v != k):
+                m1.add_regressor(k)
+        m1.add_regressor('trm')
+        m1.add_regressor('estaciones')
+        m1.add_regressor('ipc')
+        m1.add_regressor('carnavales')
+        m1.add_regressor('holiday')
+        m1.fit(b)
+        future = m1.make_future_dataframe(periods=365)
+        for l in var:
+            if(v != l):
+                future[l]=b[l]
+        future['trm']=b['trm']
+        future['estaciones']=b['estaciones']
+        future['ipc']=b['ipc']
+        future['carnavales']=b['carnavales']
+        future['holiday']=b['holiday']
+        future=future.fillna(0)
+        dif[v] = round(((b['y']*100)/(m1.predict(future).iloc[: , -1]))-100,2)
+        del m1  
+#Eliminar las filas de rezagos a no tener en cuenta 
+    dif.drop(dif.head(2).index , inplace=True)
+    #dif
+    
+    varT = ['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9','trm','estaciones','ipc','carnavales','holiday']
+    mF = prp.Prophet()
+    for x in var:
+        mF.add_regressor(x)       
+    mF.fit(b)
+    futureF = mF.make_future_dataframe(periods=365)
+    for y in var:
+        futureF[y]=b[y]
+    futureF=futureF.fillna(0)
+
+    forecast = mF.predict(futureF)
+    forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail() 
+
+    figFinal = plot_plotly(mF, forecast)
+    print("Prophet for country: "+pais)
+    return figFinal
 
 def getCountries():
     return finalCSV["pais"].unique()
