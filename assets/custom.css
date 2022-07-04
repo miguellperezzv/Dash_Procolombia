@@ -37,3 +37,7 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.DateInput_input, .DateInput_input_1 {
+    Height: 30px;
+  }

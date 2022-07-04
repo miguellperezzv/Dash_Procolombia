@@ -111,7 +111,7 @@ def display_map_single_country(start_date,end_date, hub):
     ))
 
     fig.update_layout(
-        title_text='Pasajeros por país en el rango de fechas seleccionado',
+        title_text='Pasajeros por país de la región en el rango de fechas seleccionado',
         geo=dict(
             showframe=False,
             showcoastlines=False,
@@ -135,3 +135,7 @@ def getCountriesByRegion(region):
 
 def getRegions():
     return finalCSV["hub"].unique()
+
+def getActividades():
+    
+    return finalCSV[""]
