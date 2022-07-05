@@ -16,21 +16,11 @@ details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i
 
 
 
-general_summary = dbc.Row([
-    dbc.Col([
-        dbc.Row([
-            dcc.Graph(id="graph_hub"),
-        ]),
-        dbc.Row([
-            dcc.Graph(id="graph_pasajeros_pais"),
-        ]),
-        dbc.Row([
-            dcc.Graph(id="graph_barplot"),
-        ]),
-
-    ],lg=9, md=9), 
-    dbc.Col([
-        dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
+general_summary = html.Div([
+    dbc.Row([
+        dbc.Col([dcc.Graph(id="graph_hub")], lg=9, md=12 ),
+        dbc.Col([
+            dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
             dcc.Dropdown(
                 options=controlador.actividades,
@@ -55,11 +45,13 @@ general_summary = dbc.Row([
             
             
         ]),
-        
-        
-    ],lg=3, md=3),
+        ], lg=3, md=12)
+    ]),
+    dbc.Row([
+        dbc.Col([dcc.Graph(id="graph_pasajeros_pais")]),
+        dbc.Col([ dcc.Graph(id="graph_barplot")])
+    ])
 ])
-
 
 @callback(
     Output('col_summary', 'children'),

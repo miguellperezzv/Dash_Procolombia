@@ -72,11 +72,17 @@ content = html.Div(
         dcc.Loading(
                     id="ls-loading-2",
                     children=[
-                        dbc.Col([
+                dbc.Row([
+                    dbc.Col([
             
                         #summary.details_table
-                ],lg=9, md=12, id="influence_table"),
-                    ],
+                ],lg=5, md=12, id="influence_table", style={'margin-left' : "15px"}),
+                dbc.Col([
+
+                ],lg=5, md=12, id="influence_table2", style={'margin-left' : "15px"})
+                ])
+                
+                ],
                     type="circle",
                 ),
         
@@ -119,6 +125,7 @@ def loadDropdownCountries(region):
 
 @callback(
     Output("influence_table", "children"),
+    Output("influence_table2", "children"),
     Input("dropdown_region", "value")
 )
 def display_influence_table(hub):
