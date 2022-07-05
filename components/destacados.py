@@ -22,8 +22,8 @@ dropdowns = dbc.Col([
         dcc.Dropdown(
                 #options=[{'label': t, 'value': t} for t in test], 
                 #value = graficos.getCountries()[0],  
-                options = ["usa", "españa", "chile", "mexico", "panama"],
-                value = "usa",
+                options = ["estados_unidos", "espa��a", "chile", "mexico", "panama"],
+                value = "estados_unidos",
                 clearable=False,
                 id='dropdown_country_destacado',
             ),
@@ -56,14 +56,20 @@ content = html.Div(
         html.Hr(),
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluenceDestacado"),
         
-        dcc.Loading(
-                    id="ls-loading-2_destacado",
+       dcc.Loading(
+                    id="ls-loading-2_destacados",
                     children=[
-                        dbc.Col([
+                dbc.Row([
+                    dbc.Col([
             
                         #summary.details_table
-                ],lg=9, md=12, id="influence_table_destacado"),
-                    ],
+                ],lg=5, md=12, id="influence_table_destacado", style={'margin-left' : "15px"}),
+                dbc.Col([
+
+                ],lg=5, md=12, id="influence_table2_destacado", style={'margin-left' : "15px"})
+                ])
+                
+                ],
                     type="circle",
                 ),
 
@@ -119,10 +125,11 @@ def displayProphet(country):
 
 @callback(
     Output("influence_table_destacado", "children"),
-    Input("dropdown_region_destacado", "value")
+    Output("influence_table2_destacado", "children"),
+    Input("dropdown_country_destacado", "value")
 )
-def display_influence_table(hub):
-    table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
+def display_influence_table(pais):
+    table, table_activities = controlador.tabla_influencia_destacados(pais,2)
     return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 
