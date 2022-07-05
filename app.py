@@ -4,7 +4,7 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
 from app import sidebar
-from components import content, destacados, navbar
+from components import content, destacados, navbar, region
 from logica import  controlador
 import plotly.express as px
 from assets import style
@@ -24,6 +24,7 @@ app.layout = html.Div([
     dbc.Col([
         dcc.Tabs(id="tabs", value='tab_option', children=[
         dcc.Tab(label='Visualización por países', value='tab_paises'),
+        dcc.Tab(label='Visualización por Hubs', value='tab_hubs'),
         dcc.Tab(label='Países destacados', value='tab_destacados'),
         dcc.Tab(label='Load', value='tab_load'),
         
@@ -53,6 +54,8 @@ def render_content(tab):
         return dbc.Col(["Hola Mundo"])
     elif tab == "tab_destacados":
         return destacados.content
+    elif tab == "tab_hubs":
+        return region.content
 
 if __name__ == '__main__':
     app.run_server(port= 5050, debug=True)
