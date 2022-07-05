@@ -96,7 +96,7 @@ content = html.Div(
                 id="dropdown_promotion_activity_region",
                 multi=True
             ),
-        dbc.Row(html.P(html.B("Seleccione rango inicial - final: "))),
+        dbc.Row ( html.P(html.B("Seleccione rango inicial - final: "))),
         dbc.Row([
             dbc.Col([
                 dcc.DatePickerRange(
@@ -115,7 +115,15 @@ content = html.Div(
     dbc.Row([
         dbc.Col([dcc.Graph(id="graph_pasajeros_pais_region")]),
         dbc.Col([ dcc.Graph(id="graph_barplot_region")])
-    ])
+    ]),
+    html.Div([
+        '''
+        dbc.Col([
+            dcc.Graph(id="graph_heatmaps")
+        ],lg=12, md=12)
+        '''
+        
+    ], id = "heatmaps_container")
 ])
         
        
@@ -141,6 +149,7 @@ def displayProphet(hub):
     Output("graph_hub_region", "figure"),
     Output("graph_pasajeros_pais_region", "figure"),
     Output("graph_barplot_region", "figure"),
+    #Output("graph_heatmaps", "figure"),
     Input ('dropdown_region_region', 'value'),
     Input('dropdown_promotion_activity_region', "value"),
     Input('datapicker_region', 'start_date'),
@@ -152,7 +161,7 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
     paises_region = controlador.getCountriesByRegion(region)
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,paises_region), controlador.display_barplot(paises_region,actividades)
+    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,paises_region), controlador.display_barplot(paises_region,actividades) #, controlador.display_heatmap_hub(paises_region,actividades)
 
 
 
@@ -166,6 +175,29 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
 def display_influence_table(hub):
     table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
     return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
+
+@callback(
+    Output("heatmaps_container", "children"),
+    Input("dropdown_promotion_activity_region", "value"),
+    Input("dropdown_region_region", "value")
+)
+def generateHeatmaps(activities, region):
+    
+    rows=[]
+    for act in activities:
+        if len(activities) != 0:
+            rows.append(
+            dbc.Row([
+                dbc.Col([
+                    dcc.Graph(
+                        figure = controlador.display_heatmap_hub(controlador.getCountriesByRegion(region),act),
+                    )
+                ],lg=12, md=12)
+            ])
+        )
+        
+    return rows
+
 
 @callback(
     Output("lblGeneralSummary_region", "children"),

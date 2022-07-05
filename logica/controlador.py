@@ -17,6 +17,7 @@ from sklearn.model_selection import train_test_split
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error #MSE
 from sklearn.metrics import mean_absolute_error #MAE
+from plotly.subplots import make_subplots
 
 
 
@@ -325,6 +326,24 @@ def tabla_influencia_variable(hub, rez):
     return table, tableActividades
     #table
 
+def display_heatmap_hub(selected_countries,selected_activity):
+    dff=df[df['pais'].isin(selected_countries)]
+    dff=dff.groupby(['pais','llave']).sum().reset_index()
+    title_joined="Cantidad Actividades realizadas del tipo: "+selected_activity+" a lo largo del tiempo para los países seleccionados"
+
+    fig = go.Figure(data=go.Heatmap(
+            z=dff[selected_activity],
+            x=dff['llave'],
+            y=dff['pais'],
+            colorscale='Viridis'))
+    fig.update_xaxes(
+            dtick="M6",
+            tickformat="%b\n%Y")
+    fig.update_layout(
+            xaxis_title="fecha",
+            yaxis_title="pais",
+            title=title_joined)
+    return fig
 
 
 def getCountries():
