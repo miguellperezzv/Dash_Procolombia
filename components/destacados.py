@@ -28,7 +28,18 @@ dropdowns = dbc.Col([
                 id='dropdown_country_destacado',
             ),
     ], lg=10, md=12),
-    
+    html.Br(),
+    dbc.Col([
+        html.P(html.B("Elija cantidad de rezagos: ")),  
+    ]),
+    html.Br(),
+    dbc.Col([
+        dcc.Slider(0, 20, 1,
+               value=5,
+               id='slider_pais_destacado'
+    )
+    ]
+    )
     
 ] ,className="dropdowns")
 
@@ -41,12 +52,13 @@ content = html.Div(
         dbc.Row([
         dropdowns,
         dbc.Col([
-
+            '''
             dcc.Loading(
                     id="ls-loading-2_destacado",
                     children=[dcc.Graph(id="graph_prophet_destacado"),],
                     type="circle",
                 ),
+            '''
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
         ], lg =8, md = 12),
         ]
@@ -110,7 +122,7 @@ content = html.Div(
 )
 
 
-
+'''
 @callback(
     Output("graph_prophet_destacado", "figure"), 
     Input("dropdown_country_destacado", "value")
@@ -122,15 +134,16 @@ def displayProphet(country):
     fig = controlador.prophet(country, 2)
 
     return fig
+'''
 
 @callback(
     Output("influence_table_destacado", "children"),
-    Output("influence_table2_destacado", "children"),
-    Input("dropdown_country_destacado", "value")
+    Input("dropdown_country_destacado", "value"),
+    Input("slider_pais", "value")
 )
-def display_influence_table(pais):
-    table, table_activities = controlador.tabla_influencia_destacados(pais,2)
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
+def display_influence_table(pais, rezagos):
+    table, table_activities = controlador.tabla_influencia_destacados(pais,rezagos)
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns])
 
 
 @callback(

@@ -347,7 +347,7 @@ def tabla_influencia_variable(hub, rez):
         'otras_acciones_promocion_turismo', 'primera_visita']
     tableActividades = table[table.variables.isin(buenos)]
     table
-    return table, tableActividades
+    return resultados, tableActividades
     #table
 
 def tabla_influencia_destacados(pais, rez):

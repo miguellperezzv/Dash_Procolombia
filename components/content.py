@@ -42,10 +42,11 @@ dropdowns = dbc.Col([
                 id='dropdown_country',
             ),
     ], lg=10, md=12),
-
+    html.Br(),
     dbc.Col([
         html.P(html.B("Elija cantidad de rezagos: ")),  
     ]),
+    html.Br(),
     dbc.Col([
         dcc.Slider(0, 20, 1,
                value=5,
@@ -144,15 +145,6 @@ def loadDropdownCountries(region):
     return options, options[0]
 
 
-
-@callback(
-    Output("influence_table", "children"),
-    Output("influence_table2", "children"),
-    Input("dropdown_region", "value")
-)
-def display_influence_table(hub):
-    table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 @callback(
     Output("lblGeneralSummary", "children"),
