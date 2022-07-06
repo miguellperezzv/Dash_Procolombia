@@ -46,7 +46,9 @@ content = html.Div(
 
             dcc.Loading(
                     id="ls-loading-2",
-                    children=[dcc.Graph(id="graph_prophet_region"),],
+                    children=[
+                        dcc.Graph(id="graph_visitors_region")
+                        ],
                     type="circle",
                 ),
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
@@ -135,13 +137,17 @@ content = html.Div(
 
 
 @callback(
-    Output("graph_prophet_region", "figure"), 
-    Input("dropdown_region_region", "value")
+    Output("graph_visitors_region", "figure"), 
+    Input("dropdown_region_region", "value"),
+    Input('datapicker_region', 'start_date'),
+    Input('datapicker_region', 'end_date'),
     )
 
-def displayProphet(hub):
-    print("Displaying prophet")
-    fig = controlador.prophet(hub, 2)
+def displayvisitors(hub, inicio, fin):
+    #print("Displaying prophet")
+    start_date = dt.strptime(inicio, '%Y-%m-%d')
+    end_date = dt.strptime(fin, '%Y-%m-%d')
+    fig = controlador.heatmap_visitors(hub, start_date,end_date)
 
     return fig
 

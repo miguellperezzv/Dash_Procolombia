@@ -8,6 +8,7 @@ from assets import style
 from logica import controlador
 import time
 from dash import dash_table
+import seaborn as sns
 
 
 
@@ -41,6 +42,17 @@ dropdowns = dbc.Col([
                 id='dropdown_country',
             ),
     ], lg=10, md=12),
+
+    dbc.Col([
+        html.P(html.B("Elija cantidad de rezagos: ")),  
+    ]),
+    dbc.Col([
+        dcc.Slider(0, 20, 1,
+               value=5,
+               id='slider_pais'
+    )
+    ]
+    )
     
     
 ] ,className="dropdowns")
@@ -68,18 +80,24 @@ content = html.Div(
         
         html.Hr(),
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence"),
+
+        
         
         dcc.Loading(
                     id="ls-loading-2",
                     children=[
                 dbc.Row([
+                    html.H3('Primeros 24 meses', style={"text-align":"center"}),
                     dbc.Col([
             
                         #summary.details_table
-                ],lg=5, md=12, id="influence_table", style={'margin-left' : "15px"}),
+                ],lg=12, md=12, id="influence_table_head", style={'margin-left' : "15px"}),
+                html.Br(),
+                html.Hr(),
+                html.H3('Ultimos 24 meses', style={"text-align":"center"}),
                 dbc.Col([
 
-                ],lg=5, md=12, id="influence_table2", style={'margin-left' : "15px"})
+                ],lg=12, md=12, id="influence_table_tail", style={'margin-left' : "15px"})
                 ])
                 
                 ],
@@ -102,15 +120,19 @@ content = html.Div(
 
 @callback(
     Output("graph_prophet", "figure"), 
-    Input("dropdown_country", "value")
+    Output("influence_table_head", "children"),
+    Output("influence_table_tail", "children"),
+    Input("dropdown_country", "value"),
+    Input("slider_pais", "value")
     )
 
-def displayProphet(country):
-    print(country)
+def displayProphet(country, slider):
     print("Displaying prophet")
-    fig = controlador.prophet(country, 2)
+    fig,table_head, table_tail = controlador.prophet(country, slider)
+    
+    #return fig, sns.heatmap(table_head, annot=True), sns.heatmap(table_tail, annot=True)
 
-    return fig
+    return fig, dash_table.DataTable(table_head.to_dict('records'), [{"name": i, "id": i} for i in table_head.columns]),dash_table.DataTable(table_tail.to_dict('records'), [{"name": i, "id": i} for i in table_tail.columns]),
 
 @callback(
     Output("dropdown_country", "options"),

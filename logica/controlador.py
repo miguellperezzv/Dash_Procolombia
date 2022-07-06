@@ -26,14 +26,14 @@ df = pd.read_csv('data\\final.csv', sep = "|")
 
 actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}, 
                         {'label' : 'Agendas de Cooperación', 'value' :'x2'}, 
-                        {'label' : 'Capacitaciones y presentaciones de destino' , 'value' : 'x3'}, 
-                        {'label': 'FAM - PRESS Trips','value' : 'x4'}, 
-                        {'label':'Feria internacional de Turismo' , 'value' :'x5'}, 
-                        {'label':'Macrorruedas y Encuentros Comerciales' ,'value' : 'x6'},
-                        {'label':'Primera Visita', 'value' :'x7'}, 
-                        {'label':'Entrega informacion valor agregado' ,'value' : 'x8'}, 
-                        {'label':'Otras Acciones promocion turismo' ,'value' : 'x9'}, 
-                        {'label':'Preparación y adecuación ','value' : 'x10'}]
+                        {'label' : 'Capacitaciones y presentaciones de destino' , 'value' : 'x3'},
+                        {'label':'Entrega informacion valor agregado' ,'value' : 'x4'},  
+                        {'label': 'FAM - PRESS Trips','value' : 'x5'}, 
+                        {'label':'Feria internacional de Turismo' , 'value' :'x6'}, 
+                        {'label':'Macrorruedas y Encuentros Comerciales' ,'value' : 'x7'},
+                        {'label':'Otras Acciones promocion turismo' ,'value' : 'x8'}, 
+                        {'label':'Primera Visita', 'value' :'x9'}, 
+                ]
 
 def display_map_single_country(start_date,end_date, hub): 
     f_start_date = start_date.date()
@@ -61,7 +61,7 @@ def display_map_single_country(start_date,end_date, hub):
         
         z = dff[dff['hub'] == hub]['pasajeros'],
         text = dff[dff['hub'] == hub]['codigo_pais'],
-        colorscale = 'Viridis',
+        colorscale = 'Blues',
         autocolorscale=False,
         marker_line_color='darkgray',
         marker_line_width=0.5,
@@ -214,7 +214,7 @@ def prophet(pais, numRezagos):
 
     figFinal = plot_plotly(mF, forecast)
     print("Prophet for country: "+pais)
-    return figFinal
+    return figFinal, dif.head(24), dif.tail(24)
 
 
 def rezagos(final,hub,rezagos):
@@ -505,7 +505,27 @@ def display_heatmap_hub(selected_countries,selected_activity):
             z=dff[selected_activity],
             x=dff['llave'],
             y=dff['pais'],
-            colorscale='Viridis'))
+            colorscale='Blues'))
+    fig.update_xaxes(
+            dtick="M6",
+            tickformat="%b\n%Y")
+    fig.update_layout(
+            xaxis_title="fecha",
+            yaxis_title="pais",
+            title=title_joined)
+    return fig
+
+def heatmap_visitors(hub, start_date,end_date):
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff=df[(df['hub']==hub) & (df['pais']!='venezuela') & (df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    dff=dff.groupby(['pais','llave']).sum().reset_index()
+    title_joined="Cantidad llegada de pasajeros para región "+ hub
+
+    fig = go.Figure(data=go.Heatmap(
+            z=dff['pasajeros'],
+            x=dff['llave'],
+            y=dff['pais'],
+            colorscale='Blues'))
     fig.update_xaxes(
             dtick="M6",
             tickformat="%b\n%Y")
