@@ -80,5 +80,5 @@ def generateGeneralGraphs(region,pais, actividades,inicio,fin):
     #end_date = dt(2020, 12, 1)
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais]), controlador.display_barplot([pais],actividades)
+    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
 

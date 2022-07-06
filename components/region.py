@@ -167,7 +167,7 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
     paises_region = controlador.getCountriesByRegion(region)
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,paises_region), controlador.display_barplot(paises_region,actividades) #, controlador.display_heatmap_hub(paises_region,actividades)
+    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,paises_region, start_date,end_date), controlador.display_barplot(paises_region,actividades, start_date,end_date) #, controlador.display_heatmap_hub(paises_region,actividades)
 
 
 
@@ -176,7 +176,7 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
 @callback(
     Output("influence_table_region", "children"),
     Output("influence_table2_region", "children"),
-    Input("dropdown_region_region", "value")
+    Input("dropdown_region_region", "value"),
 )
 def display_influence_table(hub):
     table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
@@ -185,10 +185,14 @@ def display_influence_table(hub):
 @callback(
     Output("heatmaps_container", "children"),
     Input("dropdown_promotion_activity_region", "value"),
-    Input("dropdown_region_region", "value")
+    Input("dropdown_region_region", "value"),
+    Input('datapicker_region', 'start_date'),
+    Input('datapicker_region', 'end_date')
 )
-def generateHeatmaps(activities, region):
+def generateHeatmaps(activities, region, inicio, fin):
     
+    start_date = dt.strptime(inicio, '%Y-%m-%d')
+    end_date = dt.strptime(fin, '%Y-%m-%d')
     rows=[]
     for act in activities:
         if len(activities) != 0:
@@ -196,7 +200,7 @@ def generateHeatmaps(activities, region):
             dbc.Row([
                 dbc.Col([
                     dcc.Graph(
-                        figure = controlador.display_heatmap_hub(controlador.getCountriesByRegion(region),act),
+                        figure = controlador.display_heatmap_hub(controlador.getCountriesByRegion(region),act, start_date, end_date),
                     )
                 ],lg=12, md=12)
             ])

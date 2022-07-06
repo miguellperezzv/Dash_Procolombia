@@ -61,13 +61,13 @@ def display_map_single_country(start_date,end_date, hub):
         
         z = dff[dff['hub'] == hub]['pasajeros'],
         text = dff[dff['hub'] == hub]['codigo_pais'],
-        colorscale = 'Blues',
+        colorscale = 'Darkmint',
         autocolorscale=False,
         marker_line_color='darkgray',
         marker_line_width=0.5,
         colorbar_title = 'Pasajeros',
     ))
-
+    fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(
         title_text='Pasajeros por país de la región en el rango de fechas seleccionado',
         geo=dict(
@@ -81,8 +81,15 @@ def display_map_single_country(start_date,end_date, hub):
     ))
     return fig
 
-def display_time_series(hub,selected_countries):
-    dff=df[df['pais'].isin(selected_countries)]
+def display_time_series(hub,selected_countries, start_date, end_date):
+    f_start_date = start_date.date()
+    start_date = pd.to_datetime(f_start_date)
+    f_end_date = end_date.date()
+    end_date = pd.to_datetime(f_end_date)
+    
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    dff=dff[dff['pais'].isin(selected_countries)]
     dff=dff.groupby(['pais','llave']).sum().reset_index()
     fig=px.line(dff,x="llave",
                 y="pasajeros", 
@@ -95,23 +102,39 @@ def display_time_series(hub,selected_countries):
     return fig
 
 
-def display_barplot(selected_countries,selected_activities):
-    dff=df[df['pais'].isin(selected_countries)]
-    dff=dff.groupby(['pais']).sum().reset_index()
-       
-    actPromocion = []
-    for i in selected_activities:
-        for act in actividades:
-            if act["value"] == i:
-                actPromocion.append(act["label"])
+def display_barplot(selected_countries,selected_activities,start_date, end_date):
+    f_start_date = start_date.date()
+    start_date = pd.to_datetime(f_start_date)
+    f_end_date = end_date.date()
+    end_date = pd.to_datetime(f_end_date)
     
-    print("actividades son !!! --------->" + str(actPromocion))
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    dff=dff[dff['pais'].isin(selected_countries)]
+
+    dff=dff.groupby(['pais']).sum().reset_index()
+     
 
     fig = px.bar(dff, x="pais",
                  y=selected_activities,
                  text_auto=True,
                  title="Total actividades de promoción por en el país",
                  labels={"variable":"actividad","value":"cantidad"})
+    
+    newnames = {'x1': 'Agenda comercial de turismo',
+                'x2': 'Agendas de Cooperación',
+                'x3': 'Capacitaciones y presentaciones de destino',
+		'x8': 'Entrega información valor agregado',
+                'x4': 'FAM - PRESS Trips',
+                'x5': 'Feria internacional de Turismo',
+                'x6': 'Macrorruedas y Encuentros Comerciales',
+		'x9': 'Otras Acciones promoción turismo',
+                'x7': 'Primera Visita',
+}
+    fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
+                                      legendgroup = newnames[t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])))
+
     return fig
 
 def rezagos_total_pais(final,pais,reg):
@@ -316,8 +339,7 @@ def tabla_influencia_variable(hub, rez):
     resultados['numero']=numero
     resultados['modelo']=modeling
     resultados=resultados.sort_values(by='metrica').reset_index(drop=True)
-    resultados=resultados.head(1)
-    resultados
+    resultados=resultados.head(12)
 
     if resultados['modelo'][0]=='gradients':
         modelo=joblib.load('modelos/'+hub+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
@@ -496,9 +518,17 @@ def tabla_influencia_destacados(pais, rez):
     table2 = table[table.variables.isin(buenos)]
     return table, table2
 
-def display_heatmap_hub(selected_countries,selected_activity):
-    dff=df[df['pais'].isin(selected_countries)]
+def display_heatmap_hub(selected_countries,selected_activity, start_date, end_date):
+    f_start_date = start_date.date()
+    start_date = pd.to_datetime(f_start_date)
+    f_end_date = end_date.date()
+    end_date = pd.to_datetime(f_end_date)
+    
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    dff=dff[dff['pais'].isin(selected_countries)]
     dff=dff.groupby(['pais','llave']).sum().reset_index()
+    dff = dff[~(dff == 0).all(axis=1)]
     title_joined="Cantidad Actividades realizadas del tipo: "+selected_activity+" a lo largo del tiempo para los países seleccionados"
 
     fig = go.Figure(data=go.Heatmap(
