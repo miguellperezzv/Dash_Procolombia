@@ -80,6 +80,8 @@ content = html.Div(
         ),
         
         html.Hr(),
+        html.H2('Resumen General por país', style={"text-align":"center"}, id="lblGeneralSummary"),
+        summary.general_summary,
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence"),
 
         
@@ -88,11 +90,6 @@ content = html.Div(
                     id="ls-loading-2",
                     children=[
                 dbc.Row([
-                    html.H3('Primeros 24 meses', style={"text-align":"center"}),
-                    dbc.Col([
-            
-                        #summary.details_table
-                ],lg=12, md=12, id="influence_table_head", style={'margin-left' : "15px"}),
                 html.Br(),
                 html.Hr(),
                 html.H3('Ultimos 24 meses', style={"text-align":"center"}),
@@ -106,10 +103,9 @@ content = html.Div(
                 ),
         
         
-        html.Hr(),
-        html.H2('Resumen General por país', style={"text-align":"center"}, id="lblGeneralSummary"),
+        
           
-        summary.general_summary
+        
         
        
     ],
@@ -121,7 +117,6 @@ content = html.Div(
 
 @callback(
     Output("graph_prophet", "figure"), 
-    Output("influence_table_head", "children"),
     Output("influence_table_tail", "children"),
     Input("dropdown_country", "value"),
     Input("slider_pais", "value")
@@ -133,7 +128,7 @@ def displayProphet(country, slider):
     
     #return fig, sns.heatmap(table_head, annot=True), sns.heatmap(table_tail, annot=True)
 
-    return fig, dash_table.DataTable(table_head.to_dict('records'), [{"name": i, "id": i} for i in table_head.columns]),dash_table.DataTable(table_tail.to_dict('records'), [{"name": i, "id": i} for i in table_tail.columns]),
+    return fig,dash_table.DataTable(table_tail.to_dict('records'), [{"name": i, "id": i} for i in table_tail.columns]),
 
 @callback(
     Output("dropdown_country", "options"),

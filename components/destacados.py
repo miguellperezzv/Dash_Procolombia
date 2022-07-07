@@ -4,11 +4,14 @@ from dash import html,  callback
 from dash.dependencies import Input, Output, State
 from logica.controlador import  actividades
 
+
 import plotly.express as px
 from assets import style
 from logica import controlador
+from logica import controlador_pais_destacado
 from dash import dash_table
-
+from datetime import datetime as dt
+from datetime import date
 
 
 dropdowns = dbc.Col([
@@ -52,13 +55,13 @@ content = html.Div(
         dbc.Row([
         dropdowns,
         dbc.Col([
-            '''
+            
             dcc.Loading(
                     id="ls-loading-2_destacado",
                     children=[dcc.Graph(id="graph_prophet_destacado"),],
                     type="circle",
                 ),
-            '''
+            
             #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
         ], lg =8, md = 12),
         ]
@@ -69,7 +72,7 @@ content = html.Div(
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluenceDestacado"),
         
        dcc.Loading(
-                    id="ls-loading-2_destacados",
+                    id="ls-loading-2_region",
                     children=[
                 dbc.Row([
                     dbc.Col([
@@ -79,7 +82,10 @@ content = html.Div(
                 dbc.Col([
 
                 ],lg=5, md=12, id="influence_table2_destacado", style={'margin-left' : "15px"})
-                ])
+                ]),
+                dbc.Row([
+                    
+                ],id="bestmodel_region", style={'align' : "center"})
                 
                 ],
                     type="circle",
@@ -89,32 +95,44 @@ content = html.Div(
         html.Hr(),
         html.H2('Resumen General por', style={"text-align":"center"}, id="lblGeneralSummaryDestacado"),
           
-        dbc.Row([
-    dbc.Col([
-        #html.P(html.B("Select a promotion activity: "))
-        dbc.Row([
-            dcc.Graph(id="graph-inner"),
-        ])
-
-    ],lg=9, md=9, id="col_summary"), 
-    dbc.Col([
-        dbc.Row(html.P(html.B("Seleccione un grupo de actividades de promoción: "))),
+        html.Div([
+    dbc.Row([
+        dbc.Col([dcc.Graph(id="graph_hub_destacado")], lg=9, md=12 ),
+        dbc.Col([
+            dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
             dcc.Dropdown(
-                options=actividades,
-                value=actividades[0]["label"],
+                options=controlador.actividades,
+                value=controlador.actividades[0]["label"],
+                #options=controlador.getActividades(),
+                #value=controlador.getActividades(),
                 clearable=False,
                 id="dropdown_promotion_activity_destacado",
                 multi=True
             ),
-        
-    ],lg=3, md=3),
+        dbc.Row(html.P(html.B("Seleccione rango inicial - final: "))),
+        dbc.Row([
+            dbc.Col([
+                dcc.DatePickerRange(
+                id = "datapicker_destacado",
+                start_date = date(2012, 1, 1), 
+                end_date=date(2022, 6, 1),
+                min_date_allowed="2012-01",
+                display_format='YYYY-MM',
+                start_date_placeholder_text='YYYY-MM'
+            )], style={"width":"30px" ,"height":"","font-size":"10px"}),       
+            
+            
+        ]),
+        ], lg=3, md=12)
+    ]),
+    dbc.Row([
+        dbc.Col([dcc.Graph(id="graph_pasajeros_pais_destacado")]),
+        dbc.Col([ dcc.Graph(id="graph_barplot_destacado")])
+    ])
 ])
         
-        #content_first_row,
-        #content_second_row,
-        #content_third_row,
-        #content_fourth_row,
+       
         
     ],
     className="contentDiv"
@@ -122,28 +140,32 @@ content = html.Div(
 )
 
 
-'''
+
 @callback(
     Output("graph_prophet_destacado", "figure"), 
-    Input("dropdown_country_destacado", "value")
+    Input("dropdown_country_destacado", "value"),
+    Input("slider_pais_destacado", "value")
     )
 
-def displayProphet(country):
+def displayProphet(country, rez):
     print(country)
     print("Displaying prophet")
-    fig = controlador.prophet(country, 2)
+    fig, table1, table2 = controlador.prophet(country, rez)
 
     return fig
-'''
+
 
 @callback(
     Output("influence_table_destacado", "children"),
+    Output("influence_table2_destacado", "children"),
+    Output("bestmodel_region", "children"),
     Input("dropdown_country_destacado", "value"),
-    Input("slider_pais", "value")
+    Input("slider_pais_destacado", "value")
 )
 def display_influence_table(pais, rezagos):
-    table, table_activities = controlador.tabla_influencia_destacados(pais,rezagos)
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns])
+    table = controlador_pais_destacado.tablas_importancia_pais_destacado_rezagos(pais,rezagos)
+    table_activities, mejor_rezago = controlador_pais_destacado.tablas_actividades_destacadas(pais, rezagos)
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]), dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
 
 
 @callback(
@@ -155,3 +177,20 @@ def display_influence_table(pais, rezagos):
 def reloadTitles(country):
     return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country+")"
 
+@callback(
+    Output("graph_hub_destacado", "figure"),
+    Output("graph_pasajeros_pais_destacado", "figure"),
+    Output("graph_barplot_destacado", "figure"),
+    #Input ('dropdown_region', 'value'),
+    Input ('dropdown_country_destacado', 'value'),
+    Input('dropdown_promotion_activity_destacado', "value"),
+    Input('datapicker_destacado', 'start_date'),
+    Input('datapicker_destacado', 'end_date')
+)
+def generateGeneralGraphs(pais, actividades,inicio,fin):
+    #start_date = dt(2012, 1, 1)
+    #end_date = dt(2020, 12, 1)
+    start_date = dt.strptime(inicio, '%Y-%m-%d')
+    end_date = dt.strptime(fin, '%Y-%m-%d')
+    region = controlador.getRegion(pais)
+    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)

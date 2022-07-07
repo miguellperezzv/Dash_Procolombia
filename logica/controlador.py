@@ -124,12 +124,12 @@ def display_barplot(selected_countries,selected_activities,start_date, end_date)
     newnames = {'x1': 'Agenda comercial de turismo',
                 'x2': 'Agendas de Cooperación',
                 'x3': 'Capacitaciones y presentaciones de destino',
-		'x8': 'Entrega información valor agregado',
-                'x4': 'FAM - PRESS Trips',
-                'x5': 'Feria internacional de Turismo',
-                'x6': 'Macrorruedas y Encuentros Comerciales',
-		'x9': 'Otras Acciones promoción turismo',
-                'x7': 'Primera Visita',
+		'x4': 'Entrega información valor agregado',
+                'x5': 'FAM - PRESS Trips',
+                'x6': 'Feria internacional de Turismo',
+                'x7': 'Macrorruedas y Encuentros Comerciales',
+		'x8': 'Otras Acciones promoción turismo',
+                'x9': 'Primera Visita',
 }
     fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                       legendgroup = newnames[t.name],
@@ -163,9 +163,6 @@ def rezagos_total_pais(final,pais,reg):
 
 
 def rezagos_pais(final,pais,rezagos):
-    if rezagos==0:
-        verificacion=final[final['pais']==pais]
-    else:
         datos=final[final['pais']==pais]
         datos.set_index('llave',inplace = True)
         d=pd.DataFrame([])
@@ -187,7 +184,7 @@ def rezagos_pais(final,pais,rezagos):
         c.columns = ['ds', 'y']
         c['ds']= pd.to_datetime(c['ds'])
         ejercicio=pd.merge(c, verificacion, on='ds',how='left').fillna(0)
-    return ejercicio
+        return ejercicio
 
 
 def prophet(pais, numRezagos):
@@ -267,6 +264,35 @@ def rezagos(final,hub,rezagos):
         
     return verificacion
 
+def rezagos_total(final,hub,rezagos):
+    datos=final[final['hub']==hub]
+    datos['pais']=datos['pais'].astype('category')
+    datos['pais']=datos['pais'].cat.codes
+    datos.set_index('llave',inplace = True)
+    t=pd.DataFrame([])
+    for a in range(rezagos):
+        d=pd.DataFrame([])
+        for f in list(datos['pais'].unique()):
+            c=datos[datos['pais']==f]
+            c=c[['pais','x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9']]
+            c=c.shift(periods=a)
+            d=pd.concat([d,c])
+        if a==0:
+            t=pd.concat([t,d],axis=1)
+        else:
+            d.columns=['pais','x1_'+str(a), 'x2_'+str(a),'x3_'+str(a),'x4_'+str(a),'x5_'+str(a),'x6_'+str(a),'x7_'+str(a),'x8_'+str(a), 'x9_'+str(a)]
+            d=d[['x1_'+str(a), 'x2_'+str(a),'x3_'+str(a),'x4_'+str(a),'x5_'+str(a),'x6_'+str(a),'x7_'+str(a),'x8_'+str(a), 'x9_'+str(a)]]
+            t=pd.concat([t,d],axis=1)
+            
+    t=t.reset_index()
+    datos=datos.drop(['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9'], axis=1)
+    datos=datos.reset_index()
+    verificacion=pd.merge(datos,t, on= ['llave','pais'],how='inner')
+    verificacion=verificacion.fillna(0)
+        
+    return verificacion
+
+
 def tabla_influencia_variable(hub, rez):
 
     ### leer los joblib del gradient
@@ -339,7 +365,7 @@ def tabla_influencia_variable(hub, rez):
     resultados['numero']=numero
     resultados['modelo']=modeling
     resultados=resultados.sort_values(by='metrica').reset_index(drop=True)
-    resultados=resultados.head(12)
+    resultados=resultados.head(1)
 
     if resultados['modelo'][0]=='gradients':
         modelo=joblib.load('modelos/'+hub+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
@@ -368,8 +394,47 @@ def tabla_influencia_variable(hub, rez):
         'macrorruedas_y_encuentros_comerciales',
         'otras_acciones_promocion_turismo', 'primera_visita']
     tableActividades = table[table.variables.isin(buenos)]
-    table
-    return resultados, tableActividades
+    ## mejor modelo total rezagos
+    '''
+    resultados_1=pd.DataFrame()
+    lista=[]
+    numero=[]
+    modeling=[]
+    reales=['pais', 'cantidad_ciudades', 'educacion',
+        'eventos', 'negocios', 'otros', 'religion', 'salud', 'sin_motivo',
+        'transito', 'vacaciones', 'trm', 'estaciones', 'ipc',
+        'carnavales', 'holiday', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x7', 'x8',
+        'x9', 'x1_1', 'x2_1', 'x3_1', 'x4_1', 'x5_1', 'x6_1', 'x7_1', 'x8_1',
+        'x9_1', 'x1_2', 'x2_2', 'x3_2', 'x4_2', 'x5_2', 'x6_2', 'x7_2', 'x8_2',
+        'x9_2', 'x1_3', 'x2_3', 'x3_3', 'x4_3', 'x5_3', 'x6_3', 'x7_3', 'x8_3',
+        'x9_3', 'x1_4', 'x2_4', 'x3_4', 'x4_4', 'x5_4', 'x6_4', 'x7_4', 'x8_4',
+        'x9_4', 'x1_5', 'x2_5', 'x3_5', 'x4_5', 'x5_5', 'x6_5', 'x7_5', 'x8_5',
+        'x9_5', 'x1_6', 'x2_6', 'x3_6', 'x4_6', 'x5_6', 'x6_6', 'x7_6', 'x8_6',
+        'x9_6', 'x1_7', 'x2_7', 'x3_7', 'x4_7', 'x5_7', 'x6_7', 'x7_7', 'x8_7',
+        'x9_7', 'x1_8', 'x2_8', 'x3_8', 'x4_8', 'x5_8', 'x6_8', 'x7_8', 'x8_8',
+        'x9_8']
+    for t,c in enumerate([gradient_total,xgboost_total]):
+        verificacion=rezagos_total(finalCSV,hub,rez)
+        X_train, X_test, y_train, y_test = train_test_split(verificacion[reales],verificacion[['pasajeros']], test_size=0.2, random_state=100, shuffle=True)
+        predicciones = c.predict(X = X_test)
+        rmse = mean_squared_error(
+                y_true  = y_test,
+                y_pred  = predicciones,
+                squared = False
+            )
+        lista.append(rmse)
+        if t==0:
+            modeling.append('gradient')
+        else:
+            modeling.append('xgboost')
+            
+
+    resultados_1['metrica']=lista
+    resultados_1['modelo']=modeling
+    resultados_1=resultados_1.sort_values(by='metrica').reset_index(drop=True)
+    resultados_1=resultados_1.head(1)'''
+
+    return table, tableActividades
     #table
 
 def tabla_influencia_destacados(pais, rez):
@@ -576,6 +641,7 @@ def getCountriesByRegion(region):
 def getRegions():
     return finalCSV["hub"].unique()
 
-def getActividades():
-
-    return finalCSV[""]
+def getRegion(pais):
+    region = finalCSV[finalCSV["pais"] == pais]["hub"].head(1)
+    print("REGION ES "+ region)
+    return region

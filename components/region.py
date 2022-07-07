@@ -28,7 +28,18 @@ dropdowns = dbc.Col([
             ),
     ],lg=10, md=12),
     html.Br(),
-
+    html.Br(),
+    dbc.Col([
+        html.P(html.B("Elija cantidad de rezagos: ")),  
+    ]),
+    html.Br(),
+    dbc.Col([
+        dcc.Slider(0, 20, 1,
+               value=5,
+               id='slider_region'
+    )
+    ]
+    )
     
     
     
@@ -37,27 +48,8 @@ dropdowns = dbc.Col([
 
 content = html.Div(
     [
-        
-        html.H2('Predicción de visitantes por País ', style={"text-align":"center"}, id = "lblVisitors_region"),
         html.Hr(),
-        dbc.Row([
         dropdowns,
-        dbc.Col([
-
-            dcc.Loading(
-                    id="ls-loading-2",
-                    children=[
-                        dcc.Graph(id="graph_visitors_region")
-                        ],
-                    type="circle",
-                ),
-            #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
-        ], lg =8, md = 12),
-        ]
-            
-        ),
-        
-        html.Hr(),
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence_region"),
         
         dcc.Loading(
@@ -71,11 +63,15 @@ content = html.Div(
                 dbc.Col([
 
                 ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"})
-                ])
+                ]),
+                dbc.Row([
+                    
+                ],id="bestmodel_region", style={'align' : "center"})
                 
                 ],
                     type="circle",
                 ),
+
         
         
         html.Hr(),
@@ -126,7 +122,28 @@ content = html.Div(
         '''
         
     ], id = "heatmaps_container")
-])
+]),
+
+            html.H2('Predicción de visitantes por País ', style={"text-align":"center"}, id = "lblVisitors_region"),
+        html.Hr(),
+        dbc.Row([
+        
+        dbc.Col([
+
+            dcc.Loading(
+                    id="ls-loading-2",
+                    children=[
+                        dcc.Graph(id="graph_visitors_region")
+                        ],
+                    type="circle",
+                ),
+            #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
+        ], lg =8, md = 12),
+        ]
+            
+        ),
+        
+        
         
        
     ],
@@ -176,10 +193,12 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
 @callback(
     Output("influence_table_region", "children"),
     Output("influence_table2_region", "children"),
+    #Output("bestmodel_region", "children"),
     Input("dropdown_region_region", "value"),
+    Input("slider_region", "value"),
 )
-def display_influence_table(hub):
-    table, table_activities = controlador.tabla_influencia_variable(hub, 2) 
+def display_influence_table(hub,rezagos):
+    table, table_activities= controlador.tabla_influencia_variable(hub, rezagos) 
     return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 @callback(
