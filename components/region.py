@@ -1,15 +1,10 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
-from dash.dependencies import Input, Output, State
-from components import summary
-import plotly.express as px
-from assets import style
+from dash.dependencies import Input, Output
 from logica import controlador, controlador_region
-import time
 from dash import dash_table
-from datetime import datetime as dt
-from datetime import date
+from datetime import datetime as dt, date
 
 
 

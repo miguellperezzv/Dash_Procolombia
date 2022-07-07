@@ -1,28 +1,17 @@
-from os import lseek
 import pandas as pd
-#import seaborn as sns
-#simport matplotlib.pyplot as plt
-import statsmodels.api as sm ### Sarimax
-import numpy as np
-import statsmodels.formula.api as smf
 import prophet as prp
-from dash import Dash, dcc, html, Input, Output, callback
-from prophet.plot import plot_plotly, plot_components_plotly
+from prophet.plot import plot_plotly
 import plotly.graph_objects as go
 import plotly.express as px
 import joblib
 import os
-from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
-import xgboost as xgb
 from sklearn.metrics import mean_squared_error #MSE
-from sklearn.metrics import mean_absolute_error #MAE
-from plotly.subplots import make_subplots
 
+DIRECTORY= os.path.dirname(os.path.dirname(__file__))
 
-
-finalCSV = pd.read_csv('data\\final.csv', sep = "|")
-df = pd.read_csv('data\\final.csv', sep = "|")
+finalCSV = pd.read_csv(DIRECTORY+r'/data/final.csv', sep = "|")
+df = pd.read_csv(DIRECTORY+r'/data/final.csv', sep = "|")
 
 actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}, 
                         {'label' : 'Agendas de Cooperación', 'value' :'x2'}, 
@@ -385,7 +374,7 @@ def tabla_influencia_variable(hub, rez):
 
 def tabla_influencia_destacados(pais, rez):
     ### leer los joblib del gradient
-    directorio = 'modelos_pais_destacado/'
+    directorio = DIRECTORY+r'/modelos_pais_destacado/'
     contenido = os.listdir(directorio)
     contador=0
     name=pais+'_retrazos_'
@@ -393,11 +382,6 @@ def tabla_influencia_destacados(pais, rez):
     gradients=[]
     xgboost=[]
 
-    #directorio = 'modelos/paises/'
-    contenido = os.listdir(directorio)
-    contador=0
-    name=pais+'_retrazos_'
-    name1=pais+'_retrazos_total'
     for a,fichero in enumerate(contenido):
         if os.path.isfile(os.path.join(directorio, fichero)) and fichero.startswith(name):
             modelo_hub=os.path.join(directorio, fichero)
@@ -502,9 +486,9 @@ def tabla_influencia_destacados(pais, rez):
     resultados_1=resultados_1.sort_values(by='metrica').reset_index(drop=True)
     resultados_1=resultados_1.head(1)
     if resultados['modelo'][0]=='gradients':
-        modelo=joblib.load('modelos/paises/'+pais+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos/paises/'+pais+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
     else:
-        modelo=joblib.load('modelos/paises/'+pais+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos/paises/'+pais+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
     importancias=list(modelo.feature_importances_)
 
     a=['cantidad_ciudades','educacion',
