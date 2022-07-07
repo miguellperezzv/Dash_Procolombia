@@ -237,60 +237,6 @@ def prophet(pais, numRezagos):
     return figFinal, dif.head(24), dif.tail(24)
 
 
-def rezagos(final,hub,rezagos):
-    if rezagos==0:
-        verificacion=final[final['hub']==hub]
-        verificacion['pais']=verificacion['pais'].astype('category')
-        verificacion['pais']=verificacion['pais'].cat.codes
-        #verificacion.set_index('llave',inplace = True)
-    else:
-        datos=final[final['hub']==hub]
-        datos['pais']=datos['pais'].astype('category')
-        datos['pais']=datos['pais'].cat.codes
-        datos.set_index('llave',inplace = True)
-        d=pd.DataFrame([])
-        for f in list(datos['pais'].unique()):
-            c=datos[datos['pais']==f]
-            c=c[['pais','x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9']]
-            c=c.shift(periods=rezagos)
-            d=pd.concat([d,c])
-        d = d.dropna(how='all')
-        d=d.reset_index()
-        datos=datos.drop(['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9'], axis=1)
-        datos=datos.reset_index()
-        verificacion=pd.merge(datos,d, on= ['llave','pais'],how='inner')
-        #verificacion.set_index('llave',inplace = True)
-        
-        
-    return verificacion
-
-def rezagos_total(final,hub,rezagos):
-    datos=final[final['hub']==hub]
-    datos['pais']=datos['pais'].astype('category')
-    datos['pais']=datos['pais'].cat.codes
-    datos.set_index('llave',inplace = True)
-    t=pd.DataFrame([])
-    for a in range(rezagos):
-        d=pd.DataFrame([])
-        for f in list(datos['pais'].unique()):
-            c=datos[datos['pais']==f]
-            c=c[['pais','x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9']]
-            c=c.shift(periods=a)
-            d=pd.concat([d,c])
-        if a==0:
-            t=pd.concat([t,d],axis=1)
-        else:
-            d.columns=['pais','x1_'+str(a), 'x2_'+str(a),'x3_'+str(a),'x4_'+str(a),'x5_'+str(a),'x6_'+str(a),'x7_'+str(a),'x8_'+str(a), 'x9_'+str(a)]
-            d=d[['x1_'+str(a), 'x2_'+str(a),'x3_'+str(a),'x4_'+str(a),'x5_'+str(a),'x6_'+str(a),'x7_'+str(a),'x8_'+str(a), 'x9_'+str(a)]]
-            t=pd.concat([t,d],axis=1)
-            
-    t=t.reset_index()
-    datos=datos.drop(['x1', 'x2','x3','x4','x5','x6','x7','x8', 'x9'], axis=1)
-    datos=datos.reset_index()
-    verificacion=pd.merge(datos,t, on= ['llave','pais'],how='inner')
-    verificacion=verificacion.fillna(0)
-        
-    return verificacion
 
 
 def tabla_influencia_variable(hub, rez):
