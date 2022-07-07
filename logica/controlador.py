@@ -289,14 +289,25 @@ def display_heatmap_hub(selected_countries,selected_activity, start_date, end_da
     dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
     dff=dff[dff['pais'].isin(selected_countries)]
     dff=dff.groupby(['pais','llave']).sum().reset_index()
-    dff = dff[~(dff == 0).all(axis=1)]
+    
+    removed_countries=[]
+    
+    for c in selected_countries:
+        if ((dff[dff['pais']==c][selected_activity].sum())<5).all():
+            removed_countries.append(c)
+    print(removed_countries)
+    
+    selected_countries=list(set(selected_countries)-set(removed_countries))
+    dff=finalCSV[finalCSV['pais'].isin(selected_countries)]
+    dff=dff.groupby(['pais','llave']).sum().reset_index()
+    
     title_joined="Cantidad Actividades realizadas del tipo: "+selected_activity+" a lo largo del tiempo para los países seleccionados"
 
     fig = go.Figure(data=go.Heatmap(
             z=dff[selected_activity],
             x=dff['llave'],
             y=dff['pais'],
-            colorscale='Blues'))
+            colorscale='Mint'))
     fig.update_xaxes(
             dtick="M6",
             tickformat="%b\n%Y")
@@ -316,7 +327,7 @@ def heatmap_visitors(hub, start_date,end_date):
             z=dff['pasajeros'],
             x=dff['llave'],
             y=dff['pais'],
-            colorscale='Blues'))
+            colorscale='Mint'))
     fig.update_xaxes(
             dtick="M6",
             tickformat="%b\n%Y")
