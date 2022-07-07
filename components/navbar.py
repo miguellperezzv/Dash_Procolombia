@@ -1,24 +1,7 @@
-import dash
 import dash_bootstrap_components as dbc
-from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output, State
-import os 
-import plotly.express as px
 from assets import style
 
-
-
-
-"""
-navbar = dbc.Navbar([
-    dbc.Row([
-        dbc.Col(['Column 1']),
-        dbc.Col(['Column 2']),
-        dbc.Col(['Column 3']),
-    ])
-]),
-"""    
 
 navbar= dbc.Navbar(
     [
@@ -38,10 +21,10 @@ navbar= dbc.Navbar(
             html.A(
             html.Img(src=style.PROCOLOMBIA_LOGO, height="50px"),
             href="https://procolombia.co/",
-            style={'textAlign': 'center','margin-left': '5%',}
+            style={'textAlign': 'center','margin-left': '5%', 'display': 'contents',}
                 ),
             ],
-            width=0.5,
+            width=2,
         ),
         dbc.Col(
             [

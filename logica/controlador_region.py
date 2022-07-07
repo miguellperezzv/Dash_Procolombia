@@ -1,15 +1,6 @@
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
-
-from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
-import xgboost as xgb
-
 from sklearn.metrics import mean_squared_error #MSE
-from sklearn.metrics import mean_absolute_error #MAE
-
 import joblib
 import os
 
@@ -18,7 +9,9 @@ warnings.filterwarnings('ignore')
 warnings.warn('DelftStack')
 warnings.warn('Do not show this message')
 
-final=pd.read_csv('data\\final.csv', sep = "|")
+DIRECTORY= os.path.dirname(os.path.dirname(__file__))
+
+final=pd.read_csv(DIRECTORY+r'/data/final.csv', sep = "|")
 
 def rezagos_total(final,hub,rezagos):
     datos=final[final['hub']==hub]
@@ -77,7 +70,7 @@ def rezagos(final,hub,rezagos):
 
 def tablas_actividades_destacadas(hub,rez):
     ### leer los joblib del gradient
-    directorio = 'modelos/'
+    directorio = DIRECTORY+r'/modelos/'
     contenido = os.listdir(directorio)
     contador=0
     name=hub+'_retrazos_'
@@ -146,9 +139,9 @@ def tablas_actividades_destacadas(hub,rez):
     resultados=resultados.sort_values(by='metrica').reset_index(drop=True)
     resultados=resultados.head(1)
     if resultados['modelo'][0]=='gradients':
-        modelo=joblib.load('modelos/'+hub+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos/'+hub+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
     else:
-        modelo=joblib.load('modelos/'+hub+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos/'+hub+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
 
     importancias=list(modelo.feature_importances_)
     a=['pais','cantidad_ciudades','educacion',
@@ -177,7 +170,7 @@ def tablas_actividades_destacadas(hub,rez):
 
 def tablas_importancia_region_rezagos(hub, rez):
     ### leer los joblib del gradient
-    directorio = 'modelos/'
+    directorio = DIRECTORY+r'/modelos/'
     rez=9
     contenido = os.listdir(directorio)
     contador=0
@@ -248,9 +241,9 @@ def tablas_importancia_region_rezagos(hub, rez):
     resultados_1=resultados_1.sort_values(by='metrica').reset_index(drop=True)
     resultados_1=resultados_1.head(1)
     if resultados_1['modelo'][0]=='gradient':
-        modelo2=joblib.load('modelos/'+hub+'_retrazos_total.joblib')
+        modelo2=joblib.load(DIRECTORY+r'/modelos/'+hub+'_retrazos_total.joblib')
     else:
-        modelo2=joblib.load('modelos/'+hub+'_xbost_retrazos_total.joblib')
+        modelo2=joblib.load(DIRECTORY+r'/modelos/'+hub+'_xbost_retrazos_total.joblib')
     importancias2=list(modelo2.feature_importances_)
     variables=[]
     for a in range(rez):

@@ -1,24 +1,13 @@
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
-
-from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
-import xgboost as xgb
-
 from sklearn.metrics import mean_squared_error #MSE
-from sklearn.metrics import mean_absolute_error #MAE
-
 import joblib
 import os
 
-import warnings
-warnings.filterwarnings('ignore')
-warnings.warn('DelftStack')
-warnings.warn('Do not show this message')
 
-final=pd.read_csv('data\\final.csv', sep = "|")
+DIRECTORY= os.path.dirname(os.path.dirname(__file__))
+
+final=pd.read_csv(DIRECTORY+r'/data/final.csv', sep = "|")
 
 
 
@@ -71,7 +60,7 @@ def tablas_importancia_pais_destacado_rezagos(pais, rez):
 
     ### leer los joblib del gradient
     rez=9
-    directorio = 'modelos_pais_destacado/'
+    directorio = DIRECTORY+r'/modelos_pais_destacado/'
     contenido = os.listdir(directorio)
     contador=0
     name=pais+'_retrazos_'
@@ -79,11 +68,7 @@ def tablas_importancia_pais_destacado_rezagos(pais, rez):
     gradients=[]
     xgboost=[]
 
-    directorio = 'modelos_pais_destacado/'
-    contenido = os.listdir(directorio)
-    contador=0
-    name=pais+'_retrazos_'
-    name1=pais+'_retrazos_total'
+
     for a,fichero in enumerate(contenido):
         if os.path.isfile(os.path.join(directorio, fichero)) and fichero.startswith(name):
             modelo_hub=os.path.join(directorio, fichero)
@@ -153,9 +138,9 @@ def tablas_importancia_pais_destacado_rezagos(pais, rez):
 
 
     if resultados_1['modelo'][0]=='gradient':
-        modelo2=joblib.load('modelos_pais_destacado/'+pais+'_retrazos_total.joblib')
+        modelo2=joblib.load(DIRECTORY+r'/modelos_pais_destacado/'+pais+'_retrazos_total.joblib')
     else:
-        modelo2=joblib.load('modelos_pais_destacado/'+pais+'_xbost_retrazos_total.joblib')
+        modelo2=joblib.load(DIRECTORY+r'/modelos_pais_destacado/'+pais+'_xbost_retrazos_total.joblib')
     importancias2=list(modelo2.feature_importances_)
     variables=[]
     for a in range(rez):
@@ -187,7 +172,7 @@ def tablas_importancia_pais_destacado_rezagos(pais, rez):
 
 def tablas_actividades_destacadas(pais,rez):
     ### leer los joblib del gradient
-    directorio = 'modelos_pais_destacado/'
+    directorio = DIRECTORY+r'/modelos_pais_destacado/'
     contenido = os.listdir(directorio)
     contador=0
     name=pais+'_retrazos_'
@@ -195,11 +180,6 @@ def tablas_actividades_destacadas(pais,rez):
     gradients=[]
     xgboost=[]
 
-    directorio = 'modelos_pais_destacado/'
-    contenido = os.listdir(directorio)
-    contador=0
-    name=pais+'_retrazos_'
-    name1=pais+'_retrazos_total'
     for a,fichero in enumerate(contenido):
         if os.path.isfile(os.path.join(directorio, fichero)) and fichero.startswith(name):
             modelo_hub=os.path.join(directorio, fichero)
@@ -263,9 +243,9 @@ def tablas_actividades_destacadas(pais,rez):
     resultados=resultados.head(1)
 
     if resultados['modelo'][0]=='gradients':
-        modelo=joblib.load('modelos_pais_destacado/'+pais+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos_pais_destacado/'+pais+'_retrazos_'+str(resultados['numero'][0])+'.joblib')
     else:
-        modelo=joblib.load('modelos_pais_destacado/'+pais+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
+        modelo=joblib.load(DIRECTORY+r'/modelos_pais_destacado/'+pais+'_xbost_retrazos_'+str(resultados['numero'][0])+'.joblib')
     importancias=list(modelo.feature_importances_)
     a=['cantidad_ciudades','educacion',
        'eventos', 'negocios', 'otros', 'religion', 'salud', 'sin_motivo',

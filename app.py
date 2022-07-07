@@ -15,7 +15,7 @@ app.layout = html.Div([
     navbar.navbar,
     html.Br(),
     dbc.Col([
-        dcc.Tabs(id="tabs", value='tab_load', children=[
+        dcc.Tabs(id="tabs", value='tab_insights', children=[
            
 
         dcc.Tab(label='Visualización por Hubs', value='tab_hubs'),
@@ -93,4 +93,4 @@ def callback_on_completion(status: du.UploadStatus):
 
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port= 7000, debug=True)
+    app.run_server(host='0.0.0.0', port= 9000, debug=True)
