@@ -26,17 +26,7 @@ dropdowns = dbc.Col([
             ),
     ], lg=10, md=12),
     html.Br(),
-    dbc.Col([
-        html.P(html.B("Elija cantidad de rezagos: ")),  
-    ]),
-    html.Br(),
-    dbc.Col([
-        dcc.Slider(0, 20, 1,
-               value=5,
-               id='slider_pais_destacado'
-    )
-    ]
-    )
+    
     
 ] ,className="dropdowns")
 
@@ -97,7 +87,7 @@ content = html.Div(
        
             dcc.Dropdown(
                 options=controlador.actividades,
-                value=controlador.actividades[0]["label"],
+                value=controlador.actividades[0]["value"],
                 #options=controlador.getActividades(),
                 #value=controlador.getActividades(),
                 clearable=False,
@@ -138,13 +128,12 @@ content = html.Div(
 @callback(
     Output("graph_prophet_destacado", "figure"), 
     Input("dropdown_country_destacado", "value"),
-    Input("slider_pais_destacado", "value")
     )
 
-def displayProphet(country, rez):
-    print(country)
-    print("Displaying prophet")
-    fig, table1, table2 = controlador.prophet(country, rez)
+def displayProphet(country):
+    table_activities, mejor_rezago = controlador_pais_destacado.tablas_actividades_destacadas(country)
+    rezagos = int(mejor_rezago.numero)
+    fig, table1, table2 = controlador.prophet(country, rezagos)
 
     return fig
 
@@ -154,11 +143,13 @@ def displayProphet(country, rez):
     Output("influence_table2_destacado", "children"),
     Output("bestmodel_destacado", "children"),
     Input("dropdown_country_destacado", "value"),
-    Input("slider_pais_destacado", "value")
+    #Input("slider_pais_destacado", "value")
 )
-def display_influence_table(pais, rezagos):
+def display_influence_table(pais):
+    table_activities, mejor_rezago = controlador_pais_destacado.tablas_actividades_destacadas(pais)
+    rezagos = int(mejor_rezago.numero)
     table = controlador_pais_destacado.tablas_importancia_pais_destacado_rezagos(pais,rezagos)
-    table_activities, mejor_rezago = controlador_pais_destacado.tablas_actividades_destacadas(pais, rezagos)
+    
     return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]), dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
 
 
@@ -172,7 +163,7 @@ def reloadTitles(country):
     return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country+")"
 
 @callback(
-    #Output("graph_hub_destacado", "figure"),
+    Output("graph_hub_destacado", "figure"),
     Output("graph_pasajeros_pais_destacado", "figure"),
     Output("graph_barplot_destacado", "figure"),
     #Input ('dropdown_region', 'value'),
@@ -184,9 +175,10 @@ def reloadTitles(country):
 def generateGeneralGraphs(pais, actividades,inicio,fin):
     #start_date = dt(2012, 1, 1)
     #end_date = dt(2020, 12, 1)
+    print(actividades)
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
     region = controlador.getRegion(pais)
     print("REGION "+ region+ "fin ")
     #return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
-    return  controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
+    return  controlador.display_map_single_country(start_date,end_date, pais),controlador.display_time_series([pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)

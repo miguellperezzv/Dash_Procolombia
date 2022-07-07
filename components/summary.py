@@ -20,7 +20,7 @@ general_summary = html.Div([
        
             dcc.Dropdown(
                 options=controlador.actividades,
-                value=controlador.actividades[0]["label"],
+                value=controlador.actividades[0]["value"],
                 #options=controlador.getActividades(),
                 #value=controlador.getActividades(),
                 clearable=False,
@@ -65,16 +65,18 @@ def generateGeneralStats(activities, country):
     Output("graph_hub", "figure"),
     Output("graph_pasajeros_pais", "figure"),
     Output("graph_barplot", "figure"),
-    Input ('dropdown_region', 'value'),
+    #Input ('dropdown_region', 'value'),
     Input ('dropdown_country', 'value'),
     Input('dropdown_promotion_activity', "value"),
     Input('datapicker', 'start_date'),
     Input('datapicker', 'end_date')
 )
-def generateGeneralGraphs(region,pais, actividades,inicio,fin):
+def generateGeneralGraphs(pais, actividades,inicio,fin):
+    
     #start_date = dt(2012, 1, 1)
     #end_date = dt(2020, 12, 1)
+    print(actividades)
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
+    return controlador.display_map_single_country(start_date,end_date,pais), controlador.display_time_series([pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
 

@@ -24,7 +24,7 @@ actividades = [         {'label':'Agenda comercial de turismo' , 'value' : 'x1'}
                         {'label':'Primera Visita', 'value' :'x9'}, 
                 ]
 
-def display_map_single_country(start_date,end_date, hub): 
+def display_map_single_region(start_date,end_date, hub): 
     f_start_date = start_date.date()
     start_date = pd.to_datetime(f_start_date)
     f_end_date = end_date.date()
@@ -70,7 +70,59 @@ def display_map_single_country(start_date,end_date, hub):
     ))
     return fig
 
-def display_time_series(hub,selected_countries, start_date, end_date):
+
+#PRINCIPAL MODIFICATIONS AFTER PROCOLOMBIA'S MEETING:
+#this is the function to display the map per country
+#IT ZOOMS TO THE COUNTRY A LOT, IT IS BETTER THE HUBS MAP
+
+def display_map_single_country(start_date,end_date, country): 
+    f_start_date = start_date.date()
+    start_date = pd.to_datetime(f_start_date)
+    f_end_date = end_date.date()
+    end_date = pd.to_datetime(f_end_date)
+    
+    df["llave"] = pd.to_datetime(df["llave"], format="%Y-%m")
+    dff= df[(df['llave'] >= start_date) & (df['llave'] <= end_date)]
+    
+    #Should create a new column to map called "codigo_pais"
+    espana_key=df.iloc[2670]['pais']
+    country_codes={'alemania': 'DEU', 'antigua_y_barbuda': 'ATG', 'argentina': 'ARG','aruba': 'ABW', 'australia': 'AUS', 'austria': 'AUT', 'azerbaiyan': 'AZE', 'bahrein': 'BHR', 'barbados': 'BRB', 'belgica': 'BEL', 'bolivia': 'BOL', 'brasil': 'BRA', 'bulgaria': 'BGR', 'canada': 'CAN', 'chile': 'CHL', 'china': 'CHN', 'chipre': 'CYP', 'costa_rica': 'CRI', 'croacia': 'HRV', 'cuba': 'CUB', 'dinamarca': 'DNK', 'ecuador': 'ECU', 'egipto': 'EGY', 'el_salvador':'SLV', espana_key: 'ESP', 'estados_unidos': 'USA', 'estonia': 'EST', 'filipinas': 'PHL', 'finlandia': 'FIN', 'francia': 'FRA', 'granada': 'GRD', 'grecia': 'GRC', 'guatemala': 'GTM', 'guyana': 'GUY', 'hungria': 'HUN', 'india': 'IND', 'indonesia': 'IDN', 'islas_caiman': 'CYM', 'israel': 'ISR', 'italia': 'ITA', 'jamaica': 'JAM', 'japon': 'JPN', 'kuwait': 'KWT','letonia': 'LVA','lituania': 'LTU', 'luxemburgo': 'LUX', 'malasia': 'MYS', 'malta': 'MLT', 'mexico': 'MEX', 'monaco': 'MCO', 'nicaragua': 'NIC', 'noruega': 'NOR', 'nueva_zelanda': 'NZL','paises_bajos': 'NLD', 'panama': 'PAN', 'paraguay': 'PRY', 'peru': 'PER', 'polonia': 'POL', 'portugal': 'PRT', 'puerto_rico': 'PRI', 'reino_unido': 'GBR','republica_dominicana': 'DOM', 'rumania': 'ROU', 'rusia': 'RUS', 'santa_lucia': 'LCA','singapur': 'SGP','sri_lanka': 'LKA', 'suecia': 'SWE', 'suiza': 'CHE', 'surinam': 'SUR', 'tailandia': 'THA', 'taiwan': 'TWN', 'turquia': 'TUR', 'ucrania': 'UKR', 'venezuela': 'VEN', 'albania': 'ALB', 'qatar': 'QAT', 'republica_checa': 'CZE'}
+    dff = dff.copy()
+    dff['codigo_pais'] = dff['pais'].map(country_codes)
+    
+    
+    dff = dff.groupby(["pais", "codigo_pais", "hub"]).sum().reset_index()
+
+    fig = go.Figure(data=go.Choropleth(
+        locations=dff[dff['pais'] == country]['codigo_pais'],       
+        z = dff[dff['pais'] == country]['pasajeros'],
+        text = dff[dff['pais'] == country]['pais'],
+        colorscale = 'Darkmint',
+        marker_line_color='darkgray',
+        marker_line_width=0.5,
+        colorbar_title = 'Pasajeros'
+    ))
+    
+    fig.update_geos(fitbounds="locations", visible=False)
+
+    fig.update_layout(
+        title_text='Pasajeros por región y rango de fechas seleccionado',
+        geo=dict(
+            showframe=True,
+            showland = False,
+            showcountries = True,
+            countrycolor = 'darkgray',
+            countrywidth = 1,
+    ))
+    return fig
+
+
+
+
+
+def display_time_series(selected_countries, start_date, end_date):
+    print("SELECTED COUNTRRIESS")
+    print(selected_countries)
     f_start_date = start_date.date()
     start_date = pd.to_datetime(f_start_date)
     f_end_date = end_date.date()

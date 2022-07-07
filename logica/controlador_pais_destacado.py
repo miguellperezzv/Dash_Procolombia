@@ -170,7 +170,7 @@ def tablas_importancia_pais_destacado_rezagos(pais, rez):
     table=table[['orden','variables']]
     return table
 
-def tablas_actividades_destacadas(pais,rez):
+def tablas_actividades_destacadas(pais):
     ### leer los joblib del gradient
     directorio = DIRECTORY+r'/modelos_pais_destacado/'
     contenido = os.listdir(directorio)

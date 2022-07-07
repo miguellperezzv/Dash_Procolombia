@@ -7,7 +7,6 @@ from dash import dash_table
 from datetime import datetime as dt, date
 
 
-
 dropdowns = dbc.Col([
 
     dbc.Col([
@@ -23,18 +22,7 @@ dropdowns = dbc.Col([
             ),
     ],lg=10, md=12),
     html.Br(),
-    html.Br(),
-    dbc.Col([
-        html.P(html.B("Elija cantidad de rezagos: ")),  
-    ]),
-    html.Br(),
-    dbc.Col([
-        dcc.Slider(0, 20, 1,
-               value=5,
-               id='slider_region'
-    )
-    ]
-    )
+   
     
     
     
@@ -82,7 +70,7 @@ content = html.Div(
        
             dcc.Dropdown(
                 options=controlador.actividades,
-                value=controlador.actividades[0]["label"],
+                value=controlador.actividades[0]["value"],
                 #options=controlador.getActividades(),
                 #value=controlador.getActividades(),
                 clearable=False,
@@ -176,10 +164,11 @@ def displayvisitors(hub, inicio, fin):
 def generateGeneralGraphs(region, actividades,inicio,fin):
     #start_date = dt(2012, 1, 1)
     #end_date = dt(2020, 12, 1)
+    print(actividades)
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
     paises_region = controlador.getCountriesByRegion(region)
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,paises_region, start_date,end_date), controlador.display_barplot(paises_region,actividades, start_date,end_date) #, controlador.display_heatmap_hub(paises_region,actividades)
+    return controlador.display_map_single_region(start_date,end_date, region), controlador.display_time_series(paises_region, start_date,end_date), controlador.display_barplot(paises_region,actividades, start_date,end_date) #, controlador.display_heatmap_hub(paises_region,actividades)
 
 
 
@@ -188,14 +177,18 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
 @callback(
     Output("influence_table_region", "children"),
     Output("influence_table2_region", "children"),
-    #Output("bestmodel_region", "children"),
+    Output("bestmodel_region", "children"),
     Input("dropdown_region_region", "value"),
-    Input("slider_region", "value"),
+    #Input("slider_region", "value"),
 )
-def display_influence_table(hub,rezagos):
+def display_influence_table(hub):
+    table_activities, mejor_rezago = controlador_region.tablas_actividades_destacadas(hub)
+    rezagos = int(mejor_rezago.numero)
     table= controlador_region.tablas_importancia_region_rezagos(hub,rezagos)
-    table_activities = controlador_region.tablas_actividades_destacadas(hub,rezagos)
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
+    
+    print("MEJOR REZAGO "+ str(mejor_rezago.numero))
+    
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]), dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
 
 @callback(
     Output("heatmaps_container", "children"),
