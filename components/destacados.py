@@ -85,7 +85,7 @@ content = html.Div(
                 ]),
                 dbc.Row([
                     
-                ],id="bestmodel_region", style={'align' : "center"})
+                ],id="bestmodel_destacado", style={'align' : "center"})
                 
                 ],
                     type="circle",
@@ -158,7 +158,7 @@ def displayProphet(country, rez):
 @callback(
     Output("influence_table_destacado", "children"),
     Output("influence_table2_destacado", "children"),
-    Output("bestmodel_region", "children"),
+    Output("bestmodel_destacado", "children"),
     Input("dropdown_country_destacado", "value"),
     Input("slider_pais_destacado", "value")
 )
@@ -178,7 +178,7 @@ def reloadTitles(country):
     return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country+")"
 
 @callback(
-    Output("graph_hub_destacado", "figure"),
+    #Output("graph_hub_destacado", "figure"),
     Output("graph_pasajeros_pais_destacado", "figure"),
     Output("graph_barplot_destacado", "figure"),
     #Input ('dropdown_region', 'value'),
@@ -193,4 +193,6 @@ def generateGeneralGraphs(pais, actividades,inicio,fin):
     start_date = dt.strptime(inicio, '%Y-%m-%d')
     end_date = dt.strptime(fin, '%Y-%m-%d')
     region = controlador.getRegion(pais)
-    return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
+    print("REGION "+ region+ "fin ")
+    #return controlador.display_map_single_country(start_date,end_date, region), controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)
+    return  controlador.display_time_series(None,[pais], start_date,end_date), controlador.display_barplot([pais],actividades, start_date,end_date)

@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output, State
 from components import summary
 import plotly.express as px
 from assets import style
-from logica import controlador
+from logica import controlador, controlador_region
 import time
 from dash import dash_table
 from datetime import datetime as dt
@@ -198,7 +198,8 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
     Input("slider_region", "value"),
 )
 def display_influence_table(hub,rezagos):
-    table, table_activities= controlador.tabla_influencia_variable(hub, rezagos) 
+    table= controlador_region.tablas_importancia_region_rezagos(hub,rezagos)
+    table_activities = controlador_region.tablas_actividades_destacadas(hub,rezagos)
     return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 @callback(
