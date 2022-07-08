@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from components import content, destacados, region, navbar, insights
+from components import content, destacados, region, navbar, insights, load
 import dash_uploader as du
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
@@ -40,7 +40,7 @@ def render_content(tab):
     if tab == 'tab_paises':
         return content.content
     elif tab == 'tab_load':
-        return dbc.Col(["Hola Mundo"])
+        return load.layout
     elif tab == "tab_destacados":
         return destacados.content
     elif tab == "tab_hubs":
@@ -63,8 +63,8 @@ def get_upload_component(id):
 
 layout = html.Div(
         [
-            html.H1('Joblibs'),
-            
+            html.H2('Joblibs', style={"text-align":"center"}),
+            html.Hr(),
             html.Div(
                 [
                     html.H4('Decargar el archivo para generar los joblist'),
