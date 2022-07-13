@@ -33,23 +33,36 @@ content = html.Div(
     [
         html.Hr(),
         dropdowns,
-        html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluence_region"),
-        
+        html.H2('Actividades de Promoción Turística: Nivel de Impacto por país', style={"text-align":"center"}, id = "lblInfluence_region"),
+        html.Br(),
         dcc.Loading(
                     id="ls-loading-2_region",
                     children=[
                 dbc.Row([
+
+                    html.H4('Nivel de impacto y tiempos de efecto', style={"text-align":"center"}),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, además de que muestra en orden las actividades de promoción que tienen mayor impacto"),
                     dbc.Col([
             
                         #summary.details_table
                 ],lg=5, md=12, id="influence_table_region", style={'margin-left' : "15px"}),
-                dbc.Col([
-
-                ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"})
-                ]),
+                ], justify="center"),
+                html.Hr(),
+                
                 dbc.Row([
+                    html.H4('Principales actividades de promoción', style={"text-align":"center"}),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, ordenado de mayor a menor siendo la primera la actividad de promoción que más impacto tiene en la región (hub) junto con el período respectivo"),
+                    dbc.Col([
+
+                ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"}),
+                ], justify="center"),
                     
-                ],id="bestmodel_region", style={'align' : "center"})
+                
+               
+                dbc.Row([
+                    html.H4('Resultados en tiempo', style={"text-align":"center"}),
+                    html.P("En general en cuántos períodos de tiempo se verán reflejados los impactos de las actividades de promoción"),
+                ],id="bestmodel_region", style={'align' : "center", }, justify="center")
                 
                 ],
                     type="circle",
@@ -224,4 +237,4 @@ def generateHeatmaps(activities, region, inicio, fin):
     Input("dropdown_region_region", "value")
 )
 def reloadTitles(region):
-    return "Resumen General "+ "("+ region+")",  "Predicción de visitantes (" + region+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + region+")"
+    return "Resumen General "+ "("+ region.capitalize()+")",  "Predicción de visitantes (" + region.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + region.capitalize()+")"

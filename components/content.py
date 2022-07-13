@@ -135,4 +135,4 @@ def loadDropdownCountries(region):
     Input("dropdown_region", "value")
 )
 def reloadTitles(country, region):
-    return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + country+")"
+    return "Resumen General "+ "("+ country.capitalize()+")",  "Predicción de visitantes (" + country.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + country.capitalize()+")"

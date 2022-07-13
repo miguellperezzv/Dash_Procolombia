@@ -58,18 +58,32 @@ content = html.Div(
        dcc.Loading(
                     id="ls-loading-2_region",
                     children=[
+                html.Hr(),
                 dbc.Row([
+                    
+                   html.H4('Nivel de impacto y tiempos de efecto', style={"text-align":"center"}),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, además de que muestra en orden las actividades de promoción que tienen mayor impacto"),
                     dbc.Col([
-            
+                        
                         #summary.details_table
                 ],lg=5, md=12, id="influence_table_destacado", style={'margin-left' : "15px"}),
+                ], justify="center" ),
+
+                dbc.Row([
+                    html.H4('Principales actividades de promoción', style={"text-align":"center"}),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, ordenado de mayor a menor siendo la primera la actividad de promoción que más impacto tiene en el país junto con el período respectivo"),
                 dbc.Col([
 
                 ],lg=5, md=12, id="influence_table2_destacado", style={'margin-left' : "15px"})
-                ]),
+                ], justify="center"),
+
+                html.Hr(),
+                html.H4('Resultados en tiempo', style={"text-align":"center"}),
+                    html.P("En general en cuántos períodos de tiempo se verán reflejados los impactos de las actividades de promoción"),
                 dbc.Row([
                     
-                ],id="bestmodel_destacado", style={'align' : "center"})
+                ],id="bestmodel_destacado", style={'align' : "center"}
+                ,justify="center")
                 
                 ],
                     type="circle",
@@ -160,7 +174,7 @@ def display_influence_table(pais):
     Input("dropdown_country_destacado", "value"),
 )
 def reloadTitles(country):
-    return "Resumen General "+ "("+ country+")",  "Predicción de visitantes (" + country+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country+")"
+    return "Resumen General "+ "("+ country.capitalize()+")",  "Predicción de visitantes (" + country.capitalize()+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country.capitalize()+")"
 
 @callback(
     Output("graph_hub_destacado", "figure"),
