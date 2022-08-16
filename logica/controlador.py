@@ -144,6 +144,9 @@ def display_time_series(selected_countries, start_date, end_date):
 
 
 def display_barplot(selected_countries,selected_activities,start_date, end_date):
+
+    print("SELECTED ACTIVITIES!!")
+    print(selected_activities)
     f_start_date = start_date.date()
     start_date = pd.to_datetime(f_start_date)
     f_end_date = end_date.date()
@@ -339,10 +342,12 @@ def heatmap_visitors(hub, start_date,end_date):
 
 
 def getCountries():
-    return finalCSV["pais"].unique()
+    return finalCSV[finalCSV["pais"] != "venezuela"]["pais"].unique()
 
 def getCountriesByRegion(region):
-    return finalCSV[finalCSV["hub"] == region]["pais"].unique()
+    paises = finalCSV[finalCSV["hub"] == region]["pais"].unique() 
+    #paises = paises[paises["pais"] !=  "venezuela"]["pais"]
+    return paises
     
 
 def getRegions():

@@ -97,9 +97,9 @@ def loadDropdownCountries(region):
 @callback(
     Output("lblGeneralSummary", "children"),
     #Output("lblVisitors", "children"),
-    Output("lblInfluence", "children"),
+    #Output("lblInfluence", "children"),
     Input("dropdown_country", "value"),
     Input("dropdown_region", "value")
 )
 def reloadTitles(country, region):
-    return "Resumen General "+ "("+ country.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + country.capitalize()+")"
+    return "Resumen General "+ "("+ country.capitalize()+")"
