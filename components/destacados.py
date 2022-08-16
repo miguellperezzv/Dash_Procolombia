@@ -34,23 +34,9 @@ dropdowns = dbc.Col([
 content = html.Div(
     [
         
-        html.H2('Predicción de visitantes', style={"text-align":"center"}, id = "lblVisitorsDestacado"),
-        html.Hr(),
-        dbc.Row([
+        
         dropdowns,
-        dbc.Col([
-            
-            dcc.Loading(
-                    id="ls-loading-2_destacado",
-                    children=[dcc.Graph(id="graph_prophet_destacado"),],
-                    type="circle",
-                ),
-            
-            #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
-        ], lg =8, md = 12),
-        ]
-            
-        ),
+        
         
         html.Hr(),
         html.H2('Actividades de Promoción Turística: Nivel de Influencia por país', style={"text-align":"center"}, id = "lblInfluenceDestacado"),
@@ -138,7 +124,7 @@ content = html.Div(
 )
 
 
-
+'''
 @callback(
     Output("graph_prophet_destacado", "figure"), 
     Input("dropdown_country_destacado", "value"),
@@ -150,7 +136,7 @@ def displayProphet(country):
     fig, table1, table2 = controlador.prophet(country, rezagos)
 
     return fig
-
+'''
 
 @callback(
     Output("influence_table_destacado", "children"),
@@ -169,12 +155,12 @@ def display_influence_table(pais):
 
 @callback(
     Output("lblGeneralSummaryDestacado", "children"),
-    Output("lblVisitorsDestacado", "children"),
+    #Output("lblVisitorsDestacado", "children"),
     Output("lblInfluenceDestacado", "children"),
     Input("dropdown_country_destacado", "value"),
 )
 def reloadTitles(country):
-    return "Resumen General "+ "("+ country.capitalize()+")",  "Predicción de visitantes (" + country.capitalize()+")",  "Actividades de promoción turística: Nivel de Influencia en (" + country.capitalize()+")"
+    return "Resumen General "+ "("+ country.capitalize()+")",    "Actividades de promoción turística: Nivel de Influencia en (" + country.capitalize()+")"
 
 @callback(
     Output("graph_hub_destacado", "figure"),

@@ -237,4 +237,4 @@ def generateHeatmaps(activities, region, inicio, fin):
     Input("dropdown_region_region", "value")
 )
 def reloadTitles(region):
-    return "Resumen General "+ "("+ region.capitalize()+")",  "Predicción de visitantes (" + region.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Influencia en (" + region.capitalize()+")"
+    return "Resumen General "+ "("+ region.capitalize()+")",  "Predicción de visitantes (" + region.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Impacto en (" + region.capitalize()+")"
