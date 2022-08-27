@@ -66,11 +66,6 @@ content = html.Div(
                 
                 
                
-                dbc.Row([
-                    html.H4('Resultados en tiempo', style={"text-align":"center"}),
-                    html.P("En general en cuántos períodos de tiempo se verán reflejados los impactos de las actividades de promoción"),
-                ],id="bestmodel_region", style={'align' : "center", }, justify="center")
-                
                 ],
                     type="circle",
                 ),
@@ -84,7 +79,7 @@ content = html.Div(
 
 
     dbc.Row([
-        dbc.Col([dcc.Graph(id="graph_hub_region")], lg=9, md=12 ),
+        dbc.Col([dcc.Graph(id="graph_barplot_region")], lg=9, md=12 ),
         dbc.Col([
             dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
@@ -115,7 +110,7 @@ content = html.Div(
     ]),
     dbc.Row([
         dbc.Col([dcc.Graph(id="graph_pasajeros_pais_region")]),
-        dbc.Col([ dcc.Graph(id="graph_barplot_region")])
+        dbc.Col([ dcc.Graph(id="graph_hub_region")])
     ]),
     html.Div([
         '''
@@ -197,7 +192,7 @@ def generateGeneralGraphs(region, actividades,inicio,fin):
 @callback(
     Output("influence_table_region", "children"),
     Output("influence_table2_region", "children"),
-    Output("bestmodel_region", "children"),
+    #Output("bestmodel_region", "children"),
     Input("dropdown_region_region", "value"),
     #Input("slider_region", "value"),
 )
@@ -208,7 +203,7 @@ def display_influence_table(hub):
     
     print("MEJOR REZAGO "+ str(mejor_rezago.numero))
     
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]), dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]) #, dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
 
 @callback(
     Output("heatmaps_container", "children"),
