@@ -250,25 +250,55 @@ def tablas_importancia_region_rezagos(hub, rez):
         if a ==0:
             variables=['agenda_comercial_de_turismo', 'agendas_de_cooperacion/_misiones',
         'capacitaciones_y_presentaciones_de_destino',
-        'entrega_informacion_valor_agregado', 'fam_-_press_trips',
+        'entrega_informacion_valor_agregado', 'fam_press_trips',
         'feria_internacional_de_turismo',
         'macrorruedas_y_encuentros_comerciales',
         'otras_acciones_promocion_turismo', 'primera_visita']
         else:
-            for b in ['agenda_comercial_de_turismo_'+str(a), 'agendas_de_cooperacion/_misiones_'+str(a),'capacitaciones_y_presentaciones_de_destino_'+\
-                    str(a),'entrega_informacion_valor_agregado_'+str(a),'fam_-_press_trips_'+str(a),'feria_internacional_de_turismo_'+\
-                    str(a),'macrorruedas_y_encuentros_comerciales_'+str(a),'otras_acciones_promocion_turismo_'+str(a), 'primera_visita_'+str(a)]:
+            for b in ['agenda_comercial_de_turismo-'+str(a), 'agendas_de_cooperacion/_misiones-'+str(a),'capacitaciones_y_presentaciones_de_destino-'+\
+                    str(a),'entrega_informacion_valor_agregado-'+str(a),'fam_press_trips-'+str(a),'feria_internacional_de_turismo-'+\
+                    str(a),'macrorruedas_y_encuentros_comerciales-'+str(a),'otras_acciones_promocion_turismo-'+str(a), 'primera_visita-'+str(a)]:
                 variables.append(b)
     a=['pais', 'cantidad_ciudades', 'educacion',
         'eventos', 'negocios', 'otros', 'religion', 'salud', 'sin_motivo',
         'transito', 'vacaciones','trm', 'estaciones', 'ipc',
         'carnavales', 'holiday']
     a.extend(variables)
+    
     table=pd.DataFrame(a, columns = ['variables'])
     table['importancias']=importancias2
+    
+    
     table = table.sort_values('importancias',ascending=False).reset_index(drop=True)
     table = table[table.variables.isin(variables)]
+
+    print("a a a a a a a")
+   
+    data = []
+
+    for index, row in table.iterrows():
+        act = row["variables"].split("-")[0]
+        try:
+            r = row["variables"].split("-")[1]
+        except:
+            r = 0
+        data.append([act, r, row["importancias"]])
+        
+    print("b b b b b b b")
+    
+    table2 = pd.DataFrame(data, columns=['Actividades de Promoción', 'Mes', 'Importancia'])
+    
+    table2 = table2.drop_duplicates(subset=['Actividades de Promoción'], keep='first')
+    table2 = table2.sort_values('Importancia',ascending=False).reset_index(drop=True)
+    table2 = table2[table2["Actividades de Promoción"].isin(variables)]
+    print(table2)
+
     table=table.head(15)
     table['orden']=[a+1 for a in range(15)]
     table=table[['orden','variables']]
-    return table
+
+    table2=table2.head(15)
+    table2['orden']=[a+1 for a in range(len(table2))]
+    table2=table2[['orden','Actividades de Promoción', 'Mes']]
+
+    return table2

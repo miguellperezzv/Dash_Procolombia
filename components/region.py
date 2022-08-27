@@ -39,9 +39,24 @@ content = html.Div(
                     id="ls-loading-2_region",
                     children=[
                 dbc.Row([
+                    html.H4('Principales actividades de promoción'),
+                    html.Br(),
+                    html.Br(),
+                    html.P("La tabla muestra el impacto de las actividades de promoción, ordenado de mayor impacto a menor impacto. ordenado de mayor impacto a menor impacto.ordenado de mayor impacto a menor impacto."),
+                    dbc.Col([
 
-                    html.H4('Nivel de impacto y tiempos de efecto', style={"text-align":"center"}),
-                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, además de que muestra en orden las actividades de promoción que tienen mayor impacto"),
+                ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"}),
+                ], justify="center"),
+                    
+                html.Hr(),
+
+                dbc.Row([
+
+                    html.H4('Nivel de impacto y tiempos de efecto'),
+                    html.Br(),
+                    html.Br(),
+                    
+                    html.P("La tabla muestra en qué mes se espera que las actividades de promoción tengan efecto, ordenadas de mayor a menor impacto. ordenadas de mayor a menor impacto.ordenadas de mayor a menor impacto."),
                     dbc.Col([
             
                         #summary.details_table
@@ -49,14 +64,6 @@ content = html.Div(
                 ], justify="center"),
                 html.Hr(),
                 
-                dbc.Row([
-                    html.H4('Principales actividades de promoción', style={"text-align":"center"}),
-                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, ordenado de mayor a menor siendo la primera la actividad de promoción que más impacto tiene en la región (hub) junto con el período respectivo"),
-                    dbc.Col([
-
-                ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"}),
-                ], justify="center"),
-                    
                 
                
                 dbc.Row([
