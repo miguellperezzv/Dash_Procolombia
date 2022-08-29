@@ -33,7 +33,7 @@ content = html.Div(
     [
         html.Hr(),
         dropdowns,
-        html.H2('Actividades de Promoción Turística: Nivel de Impacto por país', style={"text-align":"center"}, id = "lblInfluence_region"),
+        html.H2('Actividades de Promoción Turística: Nivel de Impacto por región', style={"text-align":"center"}, id = "lblInfluence_region"),
         html.Br(),
         dcc.Loading(
                     id="ls-loading-2_region",
@@ -116,7 +116,7 @@ content = html.Div(
 
 
     dbc.Button(
-            "Open collapse",
+            "Información adicional de llegada de pasajeros",
             id="collapse-button",
             className="mb-3",
             color="primary",
@@ -234,9 +234,9 @@ def generateHeatmaps(activities, region, inicio, fin):
 
 @callback(
     Output("lblGeneralSummary_region", "children"),
-    Output("lblVisitors_region", "children"),
+    #Output("lblVisitors_region", "children"),
     Output("lblInfluence_region", "children"),
     Input("dropdown_region_region", "value")
 )
 def reloadTitles(region):
-    return "Resumen General "+ "("+ region.capitalize()+")",  "Predicción de visitantes (" + region.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Impacto en (" + region.capitalize()+")"
+    return "Resumen General "+ "("+ region.capitalize()+")",  "Actividades de Promoción Turística: Nivel de Impacto en (" + region.capitalize()+")"

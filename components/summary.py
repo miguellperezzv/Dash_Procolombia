@@ -14,7 +14,7 @@ details_table = dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i
 
 general_summary = html.Div([
     dbc.Row([
-        dbc.Col([dcc.Graph(id="graph_hub")], lg=9, md=12 ),
+        dbc.Col([dcc.Graph(id="graph_barplot")], lg=9, md=12 ),
         dbc.Col([
             dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
@@ -45,7 +45,7 @@ general_summary = html.Div([
     ]),
     dbc.Row([
         dbc.Col([dcc.Graph(id="graph_pasajeros_pais")]),
-        dbc.Col([ dcc.Graph(id="graph_barplot")])
+        dbc.Col([ dcc.Graph(id="graph_hub")])
     ])
 ])
 

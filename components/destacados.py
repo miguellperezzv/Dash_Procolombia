@@ -45,31 +45,30 @@ content = html.Div(
                     id="ls-loading-2_region",
                     children=[
                 html.Hr(),
+
+                dbc.Row([
+                    html.H4('Principales actividades de promoción', style={"text-align":"center"}),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, ordenado de mayor a menor siendo la primera la actividad de promoción que más impacto tiene en el país junto con el período respectivo", style={'margin-left' : "100px",'margin-right' : "100px"  }),
+                dbc.Col([
+
+                ],lg=5, md=12, id="influence_table2_destacado", style={'margin-left' : "15px"})
+                ], justify="center"),
+        html.Br(),
+        html.Hr(),
+        html.Br(),
+
                 dbc.Row([
                     
                    html.H4('Nivel de impacto y tiempos de efecto', style={"text-align":"center"}),
-                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, además de que muestra en orden las actividades de promoción que tienen mayor impacto"),
+                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, además de que muestra en orden las actividades de promoción que tienen mayor impacto", style={'margin-left' : "100px",'margin-right' : "100px"  }),
                     dbc.Col([
                         
                         #summary.details_table
                 ],lg=5, md=12, id="influence_table_destacado", style={'margin-left' : "15px"}),
                 ], justify="center" ),
 
-                dbc.Row([
-                    html.H4('Principales actividades de promoción', style={"text-align":"center"}),
-                    html.P("La tabla muestra al usuario en que mes se espera que las actividades de promoción tengan efecto, ordenado de mayor a menor siendo la primera la actividad de promoción que más impacto tiene en el país junto con el período respectivo"),
-                dbc.Col([
-
-                ],lg=5, md=12, id="influence_table2_destacado", style={'margin-left' : "15px"})
-                ], justify="center"),
-
-                html.Hr(),
-                html.H4('Resultados en tiempo', style={"text-align":"center"}),
-                    html.P("En general en cuántos períodos de tiempo se verán reflejados los impactos de las actividades de promoción"),
-                dbc.Row([
-                    
-                ],id="bestmodel_destacado", style={'align' : "center"}
-                ,justify="center")
+                
+            
                 
                 ],
                     type="circle",
@@ -81,7 +80,7 @@ content = html.Div(
           
         html.Div([
     dbc.Row([
-        dbc.Col([dcc.Graph(id="graph_hub_destacado")], lg=9, md=12 ),
+        dbc.Col([dcc.Graph(id="graph_barplot_destacado")], lg=9, md=12 ),
         dbc.Col([
             dbc.Row(html.P(html.B("Seleccione las actividades de promoción: "))),
        
@@ -112,7 +111,7 @@ content = html.Div(
     ]),
     dbc.Row([
         dbc.Col([dcc.Graph(id="graph_pasajeros_pais_destacado")]),
-        dbc.Col([ dcc.Graph(id="graph_barplot_destacado")])
+        dbc.Col([ dcc.Graph(id="graph_hub_destacado")])
     ])
 ])
         
@@ -141,7 +140,7 @@ def displayProphet(country):
 @callback(
     Output("influence_table_destacado", "children"),
     Output("influence_table2_destacado", "children"),
-    Output("bestmodel_destacado", "children"),
+    
     Input("dropdown_country_destacado", "value"),
     #Input("slider_pais_destacado", "value")
 )
@@ -150,7 +149,7 @@ def display_influence_table(pais):
     rezagos = int(mejor_rezago.numero)
     table = controlador_pais_destacado.tablas_importancia_pais_destacado_rezagos(pais,rezagos)
     
-    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns]), dash_table.DataTable(mejor_rezago.to_dict('records'), [{"name": i, "id": i} for i in mejor_rezago.columns])
+    return dash_table.DataTable(table.to_dict('records'), [{"name": i, "id": i} for i in table.columns]), dash_table.DataTable(table_activities.to_dict('records'), [{"name": i, "id": i} for i in table_activities.columns])
 
 
 @callback(
