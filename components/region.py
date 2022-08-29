@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html,  callback
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from logica import controlador, controlador_region
 from dash import dash_table
 from datetime import datetime as dt, date
@@ -42,7 +42,7 @@ content = html.Div(
                     html.H4('Principales actividades de promoción'),
                     html.Br(),
                     html.Br(),
-                    html.P("La tabla muestra el impacto de las actividades de promoción, ordenado de mayor impacto a menor impacto. ordenado de mayor impacto a menor impacto.ordenado de mayor impacto a menor impacto."),
+                    html.P("La tabla muestra el impacto de las actividades de promoción, ordenado de mayor impacto a menor impacto.", style={'margin-left' : "100px",'margin-right' : "100px"  }),
                     dbc.Col([
 
                 ],lg=5, md=12, id="influence_table2_region", style={'margin-left' : "15px"}),
@@ -56,7 +56,7 @@ content = html.Div(
                     html.Br(),
                     html.Br(),
                     
-                    html.P("La tabla muestra en qué mes se espera que las actividades de promoción tengan efecto, ordenadas de mayor a menor impacto. ordenadas de mayor a menor impacto.ordenadas de mayor a menor impacto."),
+                    html.P("La tabla muestra en qué mes se espera que las actividades de promoción tengan efecto, ordenadas de mayor a menor impacto.", style={'margin-left' : "100px",'margin-right' : "100px"  }),
                     dbc.Col([
             
                         #summary.details_table
@@ -108,40 +108,32 @@ content = html.Div(
         ]),
         ], lg=3, md=12)
     ]),
-    dbc.Row([
-        dbc.Col([dcc.Graph(id="graph_pasajeros_pais_region")]),
-        dbc.Col([ dcc.Graph(id="graph_hub_region")])
-    ]),
     html.Div([
-        '''
-        dbc.Col([
-            dcc.Graph(id="graph_heatmaps")
-        ],lg=12, md=12)
-        '''
         
-    ], id = "heatmaps_container")
-]),
-
-            html.H2('Predicción de visitantes por País ', style={"text-align":"center"}, id = "lblVisitors_region"),
-        html.Hr(),
-        dbc.Row([
         
-        dbc.Col([
+    ], id = "heatmaps_container"),
 
-            dcc.Loading(
-                    id="ls-loading-2",
-                    children=[
-                        dcc.Graph(id="graph_visitors_region")
-                        ],
-                    type="circle",
-                ),
-            #dcc.Dropdown(['Enero', 'Febrero', 'Marzo'],id="dropdown-inner")
-        ], lg =8, md = 12),
-        ]
-            
+
+
+    dbc.Button(
+            "Open collapse",
+            id="collapse-button",
+            className="mb-3",
+            color="primary",
+            n_clicks=0,
         ),
-        
-        
+        dbc.Collapse(
+            dbc.Row([
+                        dbc.Col([dcc.Graph(id="graph_pasajeros_pais_region")]),
+                        dbc.Col([ dcc.Graph(id="graph_hub_region")])
+                        ]),
+            id="collapse",
+            is_open=False,
+        ),
+
+    
+    
+]),
         
        
     ],
@@ -149,7 +141,15 @@ content = html.Div(
     #style=style.CONTENT_STYLE
 )
 
-
+@callback(
+    Output("collapse", "is_open"),
+    [Input("collapse-button", "n_clicks")],
+    [State("collapse", "is_open")],
+)
+def toggle_collapse(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 @callback(
     Output("graph_visitors_region", "figure"), 
